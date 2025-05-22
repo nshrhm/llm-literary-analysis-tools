@@ -58,8 +58,12 @@ This document provides an overview of the main data analysis Python scripts used
 - **Description**: Performs correlation analysis and FCM clustering on emotional dimension trends per model.
 - **Execution**: Run the following command from the project root directory.
   ```bash
-  python ./src/model_emotion_similarity.py
+  python ./src/model_emotion_similarity.py [--lang {ja,en}]
   ```
+- **Options**:
+  - `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
 - **Generated Files**:
   1. Correlation Analysis: `results/model_emotion_correlations.csv`, `results/figures/model_emotion_correlations.png`, `results/figures/model_emotion_correlations.svg`
   2. Cluster Analysis: `results/figures/model_emotion_silhouette.png`, `results/figures/model_emotion_silhouette.svg`
@@ -101,8 +105,12 @@ This document provides an overview of the main data analysis Python scripts used
 - **Description**: Performs correlation analysis and FCM clustering on the trend of character counts in reason texts per model.
 - **Execution**: Run the following command from the project root directory.
   ```bash
-  python ./src/model_reason_similarity.py
+  python ./src/model_reason_similarity.py [--lang {ja,en}]
   ```
+- **Options**:
+  - `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
 - **Generated Files**:
   1. Correlation Analysis: `results/model_reason_correlations.csv`, `results/figures/model_reason_correlations.png`, `results/figures/model_reason_correlations.svg`
   2. Cluster Analysis: `results/figures/model_reason_silhouette.png`, `results/figures/model_reason_silhouette.svg`
@@ -145,8 +153,12 @@ This document provides an overview of the main data analysis Python scripts used
 - **Description**: Analyzes the similarity of emotional patterns between literary works using correlation analysis and radar chart visualization.
 - **Execution**: Run the following command from the project root directory.
   ```bash
-  python ./src/text_emotion_similarity.py
+  python ./src/text_emotion_similarity.py [--lang {ja,en}]
   ```
+- **Options**:
+  - `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
 - **Generated Files**:
   1. Correlation Analysis: 
      - `results/text_emotion_correlation.csv`: Correlation matrix of emotional values between literary works
@@ -180,8 +192,12 @@ This document provides an overview of the main data analysis Python scripts used
 - **Description**: Analyzes the similarity of character count patterns in reason texts between literary works using correlation analysis and radar chart visualization.
 - **Execution**: Run the following command from the project root directory.
   ```bash
-  python ./src/text_reason_similarity.py
+  python ./src/text_reason_similarity.py [--lang {ja,en}]
   ```
+- **Options**:
+  - `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
 - **Generated Files**:
   1. Correlation Analysis: 
      - `results/text_reason_correlation.csv`: Correlation matrix of reason text character counts between literary works
@@ -241,8 +257,12 @@ This document provides an overview of the main data analysis Python scripts used
 - **Description**: Analyzes the similarity of emotional patterns between personas using correlation analysis and radar chart visualization.
 - **Execution**: Run the following command from the project root directory.
   ```bash
-  python ./src/persona_emotion_similarity.py
+  python ./src/persona_emotion_similarity.py [--lang {ja,en}]
   ```
+- **Options**:
+  - `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
 - **Generated Files**:
   1. Correlation Analysis: 
      - `results/persona_emotion_correlation.csv`: Correlation matrix of emotional values between personas
@@ -289,8 +309,12 @@ This document provides an overview of the main data analysis Python scripts used
 - **Description**: Analyzes the similarity of character count patterns in reason texts between personas using correlation analysis and radar chart visualization.
 - **Execution**: Run the following command from the project root directory.
   ```bash
-  python ./src/persona_reason_similarity.py
+  python ./src/persona_reason_similarity.py [--lang {ja,en}]
   ```
+- **Options**:
+  - `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
 - **Generated Files**:
   1. Correlation Analysis: 
      - `results/persona_reason_correlation.csv`: Correlation matrix of reason text character counts between personas

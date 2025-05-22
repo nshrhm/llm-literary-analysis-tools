@@ -27,10 +27,11 @@
 
 ## Future Development Plans
 - Language switching functionality:
-  - Implementation of message files for Japanese and English text in graphs
-  - Command-line options for language selection (--lang=ja/en) during script execution
-  - Separate output directories or filename suffixes for different language versions
+  - グラフ画像内のテキストを英語と日本語に切り替える機能が主要な視覚化スクリプトに実装されました。
+  - `src/messages.json`に日本語と英語のメッセージを構造化して定義し、`src/config.py`からこれらのメッセージを読み込む共通関数を導入しました。
+  - コマンドラインオプション `--lang` を使用して、グラフのテキストを日本語または英語に切り替える機能が実装されました。
+  - 日本語グラフは `results/figures/ja` に、英語グラフは `results/figures/en` に保存されるようになりました。
 - Code centralization:
-  - Extension of src/config.py to include more common functions and utilities
-  - Consolidation of repeated code blocks (data loading, graph saving, statistical calculations) into shared modules
-  - Unified visualization settings in config.py for consistent styling across scripts
+  - `src/config.py`と`src/messages.json`間の設定の重複を解消し、`REASON_DIMENSIONS`、`EMOTION_DIMENSIONS`、`PERSONA_MAPPING`、`CLUSTERING_CONFIG['text']['cluster_description']`を`messages.json`に一元化する作業に着手しました。
+  - `config.py`からは、これらの情報を`messages.json`から読み込むように変更し、重複する読み込み関数を削除しました。
+  - `config.py`に、指定された言語とキーに基づいて`messages.json`からメッセージを取得する共通関数を導入しました。

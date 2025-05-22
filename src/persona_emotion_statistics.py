@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from scipy.stats import skew, kurtosis
 from config import (
-    OUTPUT_DIR, EMOTION_DIMENSIONS
+    OUTPUT_DIR, ANALYSIS_COLUMNS, EMOTION_DIMENSIONS, get_message
 )
 
 def calculate_statistics(data):
@@ -25,7 +25,8 @@ def main():
     
     # ペルソナと感情次元のカラムを取得
     personas = df['persona'].unique()
-    metric_cols = list(EMOTION_DIMENSIONS.keys())
+    metric_cols = ANALYSIS_COLUMNS['values']
+    emotion_names_ja = get_message('common.emotion_dimensions', 'ja')
     
     # ペルソナごとに統計量を計算
     all_stats = []
@@ -57,7 +58,7 @@ def main():
     print(combined_stats)
     
     # 感情次元の日本語名での結果も表示
-    jp_cols = {col: EMOTION_DIMENSIONS[col] for col in metric_cols}
+    jp_cols = {col: emotion_names_ja[col] for col in metric_cols}
     stats_df_jp = combined_stats.rename(columns=jp_cols)
     print("\n感情次元の統計情報（日本語）:")
     print(stats_df_jp)

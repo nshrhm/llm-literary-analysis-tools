@@ -37,11 +37,14 @@ timestamp,text,developer,model,persona,temperature,trial,Q1value,Q2value,Q3value
     - png形式はMicrosoft Wordのため、svg形式はLaTeXのためである。
   4. 出力ファイルは元のプログラム名に準じたファイル名とし、必要に応じて単語を末尾に追記する。
   5. csvファイルはresultsフォルダに、画像はresults/figuresフォルダに保存する。
+     - 日本語グラフは 'results/figures/ja' に、英語グラフは 'results/figures/en' に保存する。
 
 ## ツール
 - 分析作業に便利なツールとなるプログラムも作成する。現在作成したツールは以下の通り
   - csv_to_tsv_converter.py: csvファイル群から新たにtsvファイル群を作成する。tsv形式のコピー＆ペーストはExcelに貼りやすいため。
-  - make_result.sh: 全プログラムを実行する。
+  - create_data_sample.py: data_all.csv から最初の3回のデータを抜き出してサンプルファイルを作成する。
+  - make_result_ja.sh: 全プログラムを実行する（日本語画像ファイル生成）
+  - make_result_en.sh: 全プログラムを実行する（英語画像ファイル生成）
 
 ## 視覚化プログラムの原則
 - **日本語フォント対応**:
@@ -52,6 +55,10 @@ timestamp,text,developer,model,persona,temperature,trial,Q1value,Q2value,Q3value
   - 視覚化プログラムで文学作品をX軸にプロットする際は、'src/config.py' に基づいて '懐中時計', 'お金とピストル', 'ぼろぼろな駝鳥' の順に設定する。
 - **バイオリンプロットの視認性**:
   - バイオリンプロットの内部を透明にし、外枠線を強調するために `sns.violinplot` に `fill=False` と `linewidth=2.0` を設定する。
+- **言語切り替え機能**:
+  - グラフ画像内のテキストは、`src/messages.json`から言語別に取得する。
+  - コマンドラインオプション `--lang` を使用して、日本語（`ja`）または英語（`en`）のテキストを切り替える。
+  - 生成されたグラフ画像は、言語に応じて `results/figures/ja` または `results/figures/en` に保存する。
 
 ## 補足
 - 本ファイルはプロジェクトの学習ジャーナルとして、Clineがプログラム開発を効果的に進めるための知見を記録するものです。プロジェクトの進捗やユーザーのフィードバックに応じて随時更新されます。
@@ -62,4 +69,5 @@ timestamp,text,developer,model,persona,temperature,trial,Q1value,Q2value,Q3value
 
 ## 今後の目標
 - 国際学術誌への論文投稿のため、英語記載のグラフ画像生成機能の追加。メッセージファイルを準備し、言語別実行時コマンドラインオプションを指定して、出力する英語画像と日本語画像を切り分ける機能を追加する。
-- プログラムの共通化を進めるため、src/config.pyに共通コードをまとめる作業を実施中。
+- プログラムの共通化を進めるため、`src/config.py`に共通コードをまとめる作業を実施中。
+- `src/messages.json`と`src/config.py`間の設定の重複を解消し、共通設定を`messages.json`に一元化する。

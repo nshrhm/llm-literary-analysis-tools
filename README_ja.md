@@ -18,7 +18,8 @@
 
 - **複数の感情次元での分析**：日本語文学作品（「懐中時計」「お金とピストル」「ぼろぼろな駝鳥」）を4つの感情次元（面白さ、驚き、悲しみ、怒り）で評価。
 - **比較研究**：異なるモデル、ペルソナ、温度設定が感情評価に与える影響を分析。
-- **視覚化ツール**：PNGおよびSVG形式で出版に適したグラフを生成し、`japanize_matplotlib`を使用して適切な日本語フォントをサポート。
+- **視覚化ツール**：PNGおよびSVG形式で出版に適したグラフを生成し、`japanize_matplotlib`を使用して適切な日本語フォントをサポート。グラフのフォント、色、スタイルは`src/config.py`で一元的に管理され、高い可読性と保守性を実現しています。
+- **言語切り替え機能**：`src/messages.json`に定義されたメッセージを利用し、コマンドラインオプションで日本語と英語のグラフ出力を切り替え可能。
 - **モジュール式分析スクリプト**：`model_emotion`、`text_emotion`、`persona_emotion`、`temperature_emotion`などのシリーズを含み、データの特定の側面に焦点を当てた分析が可能。
 
 ## インストール
@@ -42,18 +43,35 @@
 
 ## 使用方法
 
-すべての分析スクリプトを実行し、結果を生成するには：
+すべての分析スクリプトを実行し、結果を生成するには、以下のいずれかのスクリプトを実行します。
+
+- **日本語のグラフを生成**:
+   ```bash
+   bash make_result_ja.sh
+   ```
+- **英語のグラフを生成**:
+   ```bash
+   bash make_result_en.sh
+   ```
+
+これらのスクリプトはすべての分析および視覚化スクリプトを実行します。`src/`ディレクトリ内の個々のスクリプトを特定の分析のために個別に実行することも可能です。
+
+個々の視覚化スクリプト (`model_emotion_visualize.py`, `text_emotion_visualize.py`, `persona_emotion_visualize.py`, `temperature_emotion_visualize.py`など) では、`--lang` オプションを使用して、生成されるグラフの言語を指定できます。
 
 ```bash
-bash make_result.sh
+python ./src/<script_name>.py [--lang {ja,en}]
 ```
 
-このスクリプトはすべての分析および視覚化スクリプトを実行し、CSVファイルを`results/`ディレクトリに、グラフを`results/figures/`に保存します。`src/`ディレクトリ内の個々のスクリプトを特定の分析のために個別に実行することも可能です。
+- `--lang`: 可視化に使用する言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
 
 各スクリプトの詳細な情報については、[データ分析スクリプト ガイド](docs/analysis_scripts_guide_ja.md)をご参照ください。
 
 - **CSV出力**：統計結果やデータ抽出は`results/`に保存されます。
 - **図表**：グラフは`results/figures/`にPNG（Microsoft Word用）およびSVG（LaTeX用）形式で保存されます。
+  - `results/figures/ja/`: 日本語のグラフ
+  - `results/figures/en/`: 英語のグラフ
 
 ## ディレクトリ構造
 

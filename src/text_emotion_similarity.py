@@ -5,19 +5,30 @@ import seaborn as sns
 import japanize_matplotlib
 from sklearn.preprocessing import StandardScaler
 import os
+import json
+import argparse
 from config import (
-    OUTPUT_DIR, VISUALIZATION_CONFIG, EMOTION_DIMENSIONS,
-    ensure_output_directories, save_figure
+    OUTPUT_DIR, VISUALIZATION_CONFIG, CLUSTERING_CONFIG, TEXT_ORDER,
+    ensure_output_directories, save_figure, safe_read_csv, get_message
 )
 
-# テキスト識別子から日本語名へのマッピング
-TEXT_MAPPING = {
-    't1': '懐中時計',
-    't2': 'お金とピストル',
-    't3': 'ぼろぼろな駝鳥'
-}
+def load_messages(lang='ja'):
+    """言語に応じたメッセージを読み込む"""
+    import json
+    with open('src/messages.json', 'r', encoding='utf-8') as f:
+        messages = json.load(f)
+    
+    # トップレベルのメッセージとtext_emotion_similarityセクションのメッセージを結合
+    combined_messages = messages[lang].copy()
+    combined_messages.update(messages['text_emotion_similarity'][lang])
+    
+    # text_mapping は common セクションにあるため、get_message を使用して取得
+    combined_messages['text_mapping'] = get_message('common.text_mapping', lang)
+        
+    return combined_messages
 
-def create_correlation_heatmap(emotion_trends):
+
+def create_correlation_heatmap(emotion_trends, lang='ja'):
     """文学作品間の相関分析とヒートマップの作成"""
     # 文学作品間の相関係数を計算
     corr = emotion_trends.T.corr()
@@ -25,44 +36,47 @@ def create_correlation_heatmap(emotion_trends):
     # ヒートマップの作成
     plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', square=True)
-    plt.title('文学作品間の感情評価相関', pad=20)
+    messages = load_messages(lang)
+    plt.title(messages['correlation_title'], pad=20)
     plt.tight_layout()
     
     # 保存
-    save_figure(plt, 'text_emotion_correlation')
+    save_figure(plt, 'text_emotion_correlation', lang=lang)
     plt.close()
     
     # 相関行列をCSVとして保存
     corr.to_csv(os.path.join(OUTPUT_DIR, 'text_emotion_correlation.csv'))
     return corr
 
-def analyze_emotion_patterns(emotion_trends):
+def analyze_emotion_patterns(emotion_trends, lang='ja'):
     """感情パターンの詳細分析"""
     pattern_analysis = {}
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
     
     # 各文学作品の感情パターンを分析
     for text in emotion_trends.index:
         values = emotion_trends.loc[text]
         pattern_analysis[text] = {
-            'dominant_emotion': EMOTION_DIMENSIONS[values.idxmax()],
+            'dominant_emotion': get_message('common.emotion_dimensions', lang)[values.idxmax()],
             'max_value': values.max(),
-            'min_emotion': EMOTION_DIMENSIONS[values.idxmin()],
+            'min_emotion': get_message('common.emotion_dimensions', lang)[values.idxmin()],
             'min_value': values.min(),
             'mean_value': values.mean(),
             'std_value': values.std(),
             'emotion_profile': {
-                EMOTION_DIMENSIONS[col]: float(values[col])
-                for col in EMOTION_DIMENSIONS.keys()
+                get_message('common.emotion_dimensions', lang)[col]: float(values[col])
+                for col in get_message('common.emotion_dimensions', lang).keys()
             }
         }
     
     return pattern_analysis
 
-def visualize_emotion_patterns(emotion_trends):
+def visualize_emotion_patterns(emotion_trends, lang='ja'):
     """感情パターンの可視化"""
     # データの準備
     data = emotion_trends.copy()
-    data.columns = [EMOTION_DIMENSIONS[col] for col in data.columns]
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
+    data.columns = [get_message('common.emotion_dimensions', lang)[col] for col in data.columns]
     
     # レーダーチャートの作成
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
@@ -91,15 +105,17 @@ def visualize_emotion_patterns(emotion_trends):
     # レーダーチャートの設定
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(categories)
-    ax.set_title('文学作品ごとの感情パターン')
-    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+    messages = load_messages(lang)
+    ax.set_title(messages['pattern_title'])
+    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1), title=messages['legend_title'])
     
     # 保存
-    save_figure(plt, 'text_emotion_patterns')
+    save_figure(plt, 'text_emotion_patterns', lang=lang)
     plt.close()
 
-def print_pattern_analysis(pattern_analysis):
+def print_pattern_analysis(pattern_analysis, lang='ja'):
     """感情パターン分析結果の表示"""
+    messages = load_messages(lang)
     print("\n文学作品ごとの感情パターン分析:")
     for text, analysis in pattern_analysis.items():
         print(f"\n{text}:")
@@ -111,46 +127,52 @@ def print_pattern_analysis(pattern_analysis):
         for emotion, value in analysis['emotion_profile'].items():
             print(f"    {emotion}: {value:.2f}")
 
-def print_generated_files():
+def print_generated_files(lang='ja'):
     """生成されたファイルの一覧を表示"""
     print("\n生成されたファイル:")
     print("\n1. 相関分析:")
     print(f"- {os.path.join(OUTPUT_DIR, 'text_emotion_correlation.csv')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_emotion_correlation.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_emotion_correlation.svg')}")
+    figures_dir = os.path.join(OUTPUT_DIR, 'figures', lang)
+    print(f"- {os.path.join(figures_dir, 'text_emotion_correlation.png')}")
+    print(f"- {os.path.join(figures_dir, 'text_emotion_correlation.svg')}")
     
     print("\n2. 感情パターン分析:")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_emotion_patterns.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_emotion_patterns.svg')}")
+    print(f"- {os.path.join(figures_dir, 'text_emotion_patterns.png')}")
+    print(f"- {os.path.join(figures_dir, 'text_emotion_patterns.svg')}")
 
-def main():
+def main(lang='ja'):
     # 出力ディレクトリの作成
     ensure_output_directories()
     
     print("感情評価データを読み込んでいます...")
     # データの読み込みと前処理
     df = pd.read_csv(os.path.join(OUTPUT_DIR, 'text_emotion.csv'))
+    messages = load_messages(lang)
     
     # モデルごとの平均を計算し、文学作品をインデックスとして設定
-    emotion_trends = df.groupby('text')[list(EMOTION_DIMENSIONS.keys())].mean()
-    # テキスト識別子を日本語名に変換
-    emotion_trends.index = emotion_trends.index.map(TEXT_MAPPING)
+    emotion_trends = df.groupby('text')[list(get_message('common.emotion_dimensions', lang).keys())].mean()
+    # テキスト識別子を言語名に変換
+    emotion_trends.index = emotion_trends.index.map(messages['text_mapping'])
     
     print("相関分析を実行中...")
-    corr = create_correlation_heatmap(emotion_trends)
+    corr = create_correlation_heatmap(emotion_trends, lang)
     
     print("感情パターンを分析中...")
-    pattern_analysis = analyze_emotion_patterns(emotion_trends)
+    pattern_analysis = analyze_emotion_patterns(emotion_trends, lang)
     
     print("感情パターンを可視化中...")
-    visualize_emotion_patterns(emotion_trends)
+    visualize_emotion_patterns(emotion_trends, lang)
     
     # 結果の表示
-    print_pattern_analysis(pattern_analysis)
+    print_pattern_analysis(pattern_analysis, lang)
     
     print("\n分析が完了しました。")
     print(f"結果は '{OUTPUT_DIR}' ディレクトリに保存されました。")
-    print_generated_files()
+    print_generated_files(lang)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Generate similarity analysis visualizations.')
+    parser.add_argument('--lang', choices=['ja', 'en'], default='ja',
+                       help='Language for visualization (ja/en)')
+    args = parser.parse_args()
+    main(args.lang)

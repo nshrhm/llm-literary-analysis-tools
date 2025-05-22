@@ -58,8 +58,12 @@
 - **説明**: モデルごとの感情次元の傾向について相関分析、FCMクラスタリング分析を行います。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
-  python ./src/model_emotion_similarity.py
+  python ./src/model_emotion_similarity.py [--lang {ja,en}]
   ```
+- **オプション**:
+  - `--lang`: 可視化時の言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
 - **生成されるファイル**:
   1. 相関分析: `results/model_emotion_correlations.csv`, `results/figures/model_emotion_correlations.png`, `results/figures/model_emotion_correlations.svg`
   2. クラスター分析: `results/figures/model_emotion_silhouette.png`, `results/figures/model_emotion_silhouette.svg`
@@ -101,8 +105,12 @@
 - **説明**: モデルごとの理由生成文の文字数の傾向について相関分析、FCMクラスタリング分析を行ないます。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
-  python ./src/model_reason_similarity.py
+  python ./src/model_reason_similarity.py [--lang {ja,en}]
   ```
+- **オプション**:
+  - `--lang`: 可視化時の言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
 - **生成されるファイル**:
   1. 相関分析: `results/model_reason_correlations.csv`, `results/figures/model_reason_correlations.png`, `results/figures/model_reason_correlations.svg`
   2. クラスター分析: `results/figures/model_reason_silhouette.png`, `results/figures/model_reason_silhouette.svg`
@@ -145,8 +153,12 @@
 - **説明**: 文学作品間の感情パターンの類似性を分析します。相関分析とレーダーチャートによる可視化を行います。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
-  python ./src/text_emotion_similarity.py
+  python ./src/text_emotion_similarity.py [--lang {ja,en}]
   ```
+- **オプション**:
+  - `--lang`: 可視化時の言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
 - **生成されるファイル**:
   1. 相関分析: 
      - `results/text_emotion_correlation.csv`: 文学作品間の感情値相関行列
@@ -180,8 +192,12 @@
 - **説明**: 文学作品間の理由文長パターンの類似性を分析します。相関分析とレーダーチャートによる可視化を行います。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
-  python ./src/text_reason_similarity.py
+  python ./src/text_reason_similarity.py [--lang {ja,en}]
   ```
+- **オプション**:
+  - `--lang`: 可視化時の言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
 - **生成されるファイル**:
   1. 相関分析: 
      - `results/text_reason_correlation.csv`: 文学作品間の理由文長相関行列
@@ -241,8 +257,12 @@
 - **説明**: ペルソナ間の感情パターンの類似性を分析します。相関分析とレーダーチャートによる可視化を行います。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
-  python ./src/persona_emotion_similarity.py
+  python ./src/persona_emotion_similarity.py [--lang {ja,en}]
   ```
+- **オプション**:
+  - `--lang`: 可視化時の言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
 - **生成されるファイル**:
   1. 相関分析: 
      - `results/persona_emotion_correlation.csv`: ペルソナ間の感情値相関行列
@@ -289,8 +309,12 @@
 - **説明**: ペルソナ間の理由文長パターンの類似性を分析します。相関分析とレーダーチャートによる可視化を行います。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
-  python ./src/persona_reason_similarity.py
+  python ./src/persona_reason_similarity.py [--lang {ja,en}]
   ```
+- **オプション**:
+  - `--lang`: 可視化時の言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
 - **生成されるファイル**:
   1. 相関分析: 
      - `results/persona_reason_correlation.csv`: ペルソナ間の理由文長相関行列

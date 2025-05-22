@@ -5,27 +5,29 @@ import seaborn as sns
 import japanize_matplotlib
 from sklearn.preprocessing import StandardScaler
 import os
+import json
+import argparse
 from config import (
     OUTPUT_DIR, VISUALIZATION_CONFIG,
-    ensure_output_directories, save_figure
+    ensure_output_directories, save_figure, get_message
 )
 
-# テキスト識別子から日本語名へのマッピング
-TEXT_MAPPING = {
-    't1': '懐中時計',
-    't2': 'お金とピストル',
-    't3': 'ぼろぼろな駝鳥'
-}
+def load_messages(lang='ja'):
+    """言語に応じたメッセージを読み込む"""
+    with open('src/messages.json', 'r', encoding='utf-8') as f:
+        messages = json.load(f)
+    
+    combined_messages = messages['text_reason_similarity'][lang].copy()
+    
+    # text_mapping は common セクションにあるため、get_message を使用して取得
+    combined_messages['text_mapping'] = get_message('common.text_mapping', lang)
+        
+    # reason_dimensions は common セクションにあるため、get_message を使用して取得
+    combined_messages['reason_dimensions'] = get_message('common.reason_dimensions', lang)
+        
+    return combined_messages
 
-# 理由文の種類の定義
-REASON_DIMENSIONS = {
-    'Q1reason': '面白さの理由',
-    'Q2reason': '驚きの理由',
-    'Q3reason': '悲しみの理由',
-    'Q4reason': '怒りの理由'
-}
-
-def create_correlation_heatmap(reason_trends):
+def create_correlation_heatmap(reason_trends, lang='ja'):
     """文学作品間の相関分析とヒートマップの作成"""
     # 文学作品間の相関係数を計算
     corr = reason_trends.T.corr()
@@ -33,44 +35,47 @@ def create_correlation_heatmap(reason_trends):
     # ヒートマップの作成
     plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', square=True)
-    plt.title('文学作品間の理由文長相関', pad=20)
+    messages = load_messages(lang)
+    plt.title(messages['correlation_title'], pad=20)
     plt.tight_layout()
     
     # 保存
-    save_figure(plt, 'text_reason_correlation')
+    save_figure(plt, 'text_reason_correlation', lang=lang)
     plt.close()
     
     # 相関行列をCSVとして保存
     corr.to_csv(os.path.join(OUTPUT_DIR, 'text_reason_correlation.csv'))
     return corr
 
-def analyze_reason_patterns(reason_trends):
+def analyze_reason_patterns(reason_trends, lang='ja'):
     """理由文長パターンの詳細分析"""
     pattern_analysis = {}
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
     
     # 各文学作品の理由文長パターンを分析
     for text in reason_trends.index:
         values = reason_trends.loc[text]
         pattern_analysis[text] = {
-            'longest_reason': REASON_DIMENSIONS[values.idxmax()],
+            'longest_reason': get_message('common.reason_dimensions', lang)[values.idxmax()],
             'max_length': values.max(),
-            'shortest_reason': REASON_DIMENSIONS[values.idxmin()],
+            'shortest_reason': get_message('common.reason_dimensions', lang)[values.idxmin()],
             'min_length': values.min(),
             'mean_length': values.mean(),
             'std_length': values.std(),
             'length_profile': {
-                REASON_DIMENSIONS[col]: float(values[col])
-                for col in REASON_DIMENSIONS.keys()
+                get_message('common.reason_dimensions', lang)[col]: float(values[col])
+                for col in get_message('common.reason_dimensions', lang).keys()
             }
         }
     
     return pattern_analysis
 
-def visualize_reason_patterns(reason_trends):
+def visualize_reason_patterns(reason_trends, lang='ja'):
     """理由文長パターンの可視化"""
     # データの準備
     data = reason_trends.copy()
-    data.columns = [REASON_DIMENSIONS[col] for col in data.columns]
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
+    data.columns = [get_message('common.reason_dimensions', lang)[col] for col in data.columns]
     
     # レーダーチャートの作成
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
@@ -99,15 +104,17 @@ def visualize_reason_patterns(reason_trends):
     # レーダーチャートの設定
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(categories)
-    ax.set_title('文学作品ごとの理由文長パターン')
-    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+    messages = load_messages(lang)
+    ax.set_title(messages['pattern_title'])
+    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1), title=messages['legend_title'])
     
     # 保存
-    save_figure(plt, 'text_reason_patterns')
+    save_figure(plt, 'text_reason_patterns', lang=lang)
     plt.close()
 
-def print_pattern_analysis(pattern_analysis):
+def print_pattern_analysis(pattern_analysis, lang='ja'):
     """理由文長パターン分析結果の表示"""
+    messages = load_messages(lang)
     print("\n文学作品ごとの理由文長パターン分析:")
     for text, analysis in pattern_analysis.items():
         print(f"\n{text}:")
@@ -119,46 +126,52 @@ def print_pattern_analysis(pattern_analysis):
         for reason, length in analysis['length_profile'].items():
             print(f"    {reason}: {length:.2f}文字")
 
-def print_generated_files():
+def print_generated_files(lang='ja'):
     """生成されたファイルの一覧を表示"""
     print("\n生成されたファイル:")
     print("\n1. 相関分析:")
     print(f"- {os.path.join(OUTPUT_DIR, 'text_reason_correlation.csv')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_reason_correlation.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_reason_correlation.svg')}")
+    figures_dir = os.path.join(OUTPUT_DIR, 'figures', lang)
+    print(f"- {os.path.join(figures_dir, 'text_reason_correlation.png')}")
+    print(f"- {os.path.join(figures_dir, 'text_reason_correlation.svg')}")
     
     print("\n2. 理由文長パターン分析:")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_reason_patterns.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'text_reason_patterns.svg')}")
+    print(f"- {os.path.join(figures_dir, 'text_reason_patterns.png')}")
+    print(f"- {os.path.join(figures_dir, 'text_reason_patterns.svg')}")
 
-def main():
+def main(lang='ja'):
     # 出力ディレクトリの作成
     ensure_output_directories()
     
     print("理由文長データを読み込んでいます...")
     # データの読み込みと前処理
     df = pd.read_csv(os.path.join(OUTPUT_DIR, 'text_reason.csv'))
+    messages = load_messages(lang)
     
     # モデルごとの平均を計算し、文学作品をインデックスとして設定
-    reason_trends = df.groupby('text')[list(REASON_DIMENSIONS.keys())].mean()
+    reason_trends = df.groupby('text')[list(get_message('common.reason_dimensions', lang).keys())].mean()
     # テキスト識別子を日本語名に変換
-    reason_trends.index = reason_trends.index.map(TEXT_MAPPING)
+    reason_trends.index = reason_trends.index.map(messages['text_mapping'])
     
     print("相関分析を実行中...")
-    corr = create_correlation_heatmap(reason_trends)
+    corr = create_correlation_heatmap(reason_trends, lang)
     
     print("理由文長パターンを分析中...")
-    pattern_analysis = analyze_reason_patterns(reason_trends)
+    pattern_analysis = analyze_reason_patterns(reason_trends, lang)
     
     print("理由文長パターンを可視化中...")
-    visualize_reason_patterns(reason_trends)
+    visualize_reason_patterns(reason_trends, lang)
     
     # 結果の表示
-    print_pattern_analysis(pattern_analysis)
+    print_pattern_analysis(pattern_analysis, lang)
     
     print("\n分析が完了しました。")
     print(f"結果は '{OUTPUT_DIR}' ディレクトリに保存されました。")
-    print_generated_files()
+    print_generated_files(lang)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Generate similarity analysis visualizations.')
+    parser.add_argument('--lang', choices=['ja', 'en'], default='ja',
+                       help='Language for visualization (ja/en)')
+    args = parser.parse_args()
+    main(args.lang)

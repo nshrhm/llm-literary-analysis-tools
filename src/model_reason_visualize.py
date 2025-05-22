@@ -4,10 +4,12 @@ import os
 import japanize_matplotlib
 import numpy as np
 import seaborn as sns
+import json
+import argparse
 from config import (
     OUTPUT_DIR, VENDOR_PATTERNS, VENDOR_COLORS, MODEL_ORDER,
     VISUALIZATION_CONFIG, ensure_output_directories,
-    save_figure
+    save_figure, get_message
 )
 
 def get_vendor_color(model_name):
@@ -24,36 +26,15 @@ def get_vendor(model_name):
             return vendor
     return 'Other'
 
-# 出力ディレクトリを作成
-ensure_output_directories()
+def load_messages(lang):
+    """言語に応じたメッセージを読み込む"""
+    with open('src/messages.json', 'r', encoding='utf-8') as f:
+        messages = json.load(f)
+    return messages[lang]['model_reason']
 
-# CSVファイルからデータを読み込む
-def load_reason_data():
-    """理由文データの読み込み"""
-    filepath = os.path.join(OUTPUT_DIR, 'model_reason.csv')
-    try:
-        return pd.read_csv(filepath)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"ファイルが見つかりません: {filepath}")
-
-data = load_reason_data()
-
-# データをモデル順序に基づいて並べ替え
-filtered_data = data.set_index('model').reindex(MODEL_ORDER).reset_index()
-
-# 開発元情報を追加
-filtered_data['vendor'] = filtered_data['model'].apply(get_vendor)
-
-# 理由文カラムの定義
-reason_dimensions = {
-    'Q1reason': '面白さの理由',
-    'Q2reason': '驚きの理由',
-    'Q3reason': '悲しみの理由',
-    'Q4reason': '怒りの理由'
-}
-
-def create_bar_plot(filtered_data, reason_dimensions):
+def create_bar_plot(filtered_data, reasons, lang='ja'):
     """棒グラフによる理由文長の比較を作成"""
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(2, 1, height_ratios=[4, 1])
 
@@ -61,8 +42,7 @@ def create_bar_plot(filtered_data, reason_dimensions):
     ax1 = fig.add_subplot(gs[0])
 
     # グラフ上部のテキスト
-    header_text = '※各モデルの棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）'
-    ax1.text(0.5, 1.05, header_text,
+    ax1.text(0.5, 1.05, messages['header_text'],
              horizontalalignment='center',
              transform=ax1.transAxes,
              bbox=dict(facecolor='white', alpha=0.8, edgecolor='none'))
@@ -73,7 +53,7 @@ def create_bar_plot(filtered_data, reason_dimensions):
     # 各モデルのデータをプロット
     bar_width = 0.2
     x = range(len(filtered_data['model']))
-    for i, (col, _) in enumerate(reason_dimensions.items()):
+    for i, (col, label) in enumerate(reasons.items()):
         bars = ax1.bar([p + i * bar_width for p in x], filtered_data[col], 
                        bar_width)
         
@@ -84,9 +64,9 @@ def create_bar_plot(filtered_data, reason_dimensions):
             bar.set_alpha(alphas[i])
 
     # グラフの設定
-    ax1.set_xlabel('モデル')
-    ax1.set_ylabel('文字数')
-    ax1.set_title('モデルごとの理由文長の比較（開発元別）')
+    ax1.set_xlabel(messages['xlabel'])
+    ax1.set_ylabel(messages['ylabel'])
+    ax1.set_title(messages['bar_plot_title'])
     ax1.set_xticks([p + 1.5 * bar_width for p in x])
     ax1.set_xticklabels(filtered_data['model'], rotation=45, ha='right')
     ax1.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
@@ -99,18 +79,19 @@ def create_bar_plot(filtered_data, reason_dimensions):
                       alpha=VISUALIZATION_CONFIG['plot']['text_box_alpha'], label=vendor)
                       for vendor, color in VENDOR_COLORS.items()]
     ax2.legend(handles=legend_elements, 
-              title='開発元', 
+              title=messages['vendor_legend_title'], 
               loc='center', 
               ncol=len(VENDOR_COLORS),
               bbox_to_anchor=(0.5, 0.5))
 
     # レイアウトの調整
     plt.subplots_adjust(right=0.85, hspace=0.3)
-    save_figure(plt, "model_reason")
+    save_figure(plt, "model_reason", lang=lang)
     plt.close()
 
-def create_sorted_bar_plot(data, title, filename, reason_cols=None, header_text=None):
+def create_sorted_bar_plot(data, title, filename, reason_cols=None, header_text=None, lang='ja'):
     """ソートされた棒グラフを作成する共通関数"""
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(2, 1, height_ratios=[4, 1])
 
@@ -126,7 +107,7 @@ def create_sorted_bar_plot(data, title, filename, reason_cols=None, header_text=
     # 理由文ごとの透明度を設定
     alphas = [0.4, 0.6, 0.8, 1.0]  # 面白さから怒りまで徐々に濃く
     if reason_cols is None:
-        reason_cols = list(reason_dimensions.keys())
+        reason_cols = list(get_message('common.reason_dimensions', lang).keys())
 
     # 各モデルのデータをプロット
     bar_width = 0.2
@@ -141,8 +122,8 @@ def create_sorted_bar_plot(data, title, filename, reason_cols=None, header_text=
             bar.set_alpha(alphas[i] if len(reason_cols) > 1 else 0.8)
 
     # グラフの設定
-    ax1.set_xlabel('モデル')
-    ax1.set_ylabel('文字数')
+    ax1.set_xlabel(messages['xlabel'])
+    ax1.set_ylabel(messages['ylabel'])
     ax1.set_title(title)
     ax1.set_xticks([p + (len(reason_cols)-1) * bar_width/2 for p in x])
     ax1.set_xticklabels(data['model'], rotation=45, ha='right')
@@ -156,44 +137,49 @@ def create_sorted_bar_plot(data, title, filename, reason_cols=None, header_text=
                       alpha=VISUALIZATION_CONFIG['plot']['text_box_alpha'], label=vendor)
                       for vendor, color in VENDOR_COLORS.items()]
     ax2.legend(handles=legend_elements, 
-              title='開発元', 
+              title=messages['vendor_legend_title'], 
               loc='center', 
               ncol=len(VENDOR_COLORS),
               bbox_to_anchor=(0.5, 0.5))
 
     # レイアウトの調整
     plt.subplots_adjust(right=0.85, hspace=0.3)
-    save_figure(plt, filename)
+    save_figure(plt, filename, lang=lang)
     plt.close()
 
-def create_sorted_all_plot(filtered_data, reason_dimensions):
+def create_sorted_all_plot(filtered_data, reasons, lang='ja'):
     """全理由文の合計長でソートしたグラフを作成"""
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
     # 合計長を計算してソート
     data = filtered_data.copy()
-    data['total'] = data[list(reason_dimensions.keys())].sum(axis=1)
+    data['total'] = data[list(reasons.keys())].sum(axis=1)
     sorted_data = data.sort_values('total', ascending=False).drop('total', axis=1)
 
-    header_text = '※各モデルの棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）'
     create_sorted_bar_plot(
         sorted_data,
-        '理由文長の総計による比較（開発元別、降順）',
+        messages['bar_plot_title'],
         'model_reason_sorted_all',
-        header_text=header_text
+        header_text=messages['header_text'],
+        lang=lang
     )
 
-def create_sorted_individual_plots(filtered_data, reason_dimensions):
+def create_sorted_individual_plots(filtered_data, reasons, lang='ja'):
     """各理由文ごとにソートしたグラフを作成"""
-    for i, (col, label) in enumerate(reason_dimensions.items(), 1):
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
+    for i, (col, label) in enumerate(reasons.items(), 1):
         sorted_data = filtered_data.sort_values(col, ascending=False)
+        title = messages['sorted_individual_plot_title'].format(reason_label=label)
         create_sorted_bar_plot(
             sorted_data,
-            f'{label}の文字数による比較（開発元別、降順）',
+            title,
             f'model_reason_sorted_q{i}',
-            [col]
+            [col],
+            lang=lang
         )
 
-def create_distribution_plot(filtered_data, reason_dimensions):
+def create_distribution_plot(filtered_data, reasons, lang='ja'):
     """バイオリンプロットとスウォームプロットによる分布の可視化"""
+    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(2, 1, height_ratios=[4, 1])
 
@@ -203,12 +189,12 @@ def create_distribution_plot(filtered_data, reason_dimensions):
     # データを縦持ちに変換
     melted_data = pd.melt(filtered_data, 
                           id_vars=['model', 'vendor'],
-                          value_vars=list(reason_dimensions.keys()),
+                          value_vars=list(reasons.keys()),
                           var_name='reason_type',
                           value_name='length')
 
-    # 理由ラベルを日本語に変換
-    melted_data['reason_type'] = melted_data['reason_type'].map(reason_dimensions)
+    # 理由ラベルを言語に応じて変換
+    melted_data['reason_type'] = melted_data['reason_type'].map(reasons)
 
     # バイオリンプロット
     sns.violinplot(data=melted_data, x='reason_type', y='length', hue='vendor',
@@ -219,9 +205,9 @@ def create_distribution_plot(filtered_data, reason_dimensions):
                   ax=ax_violin, dodge=True, size=3, alpha=0.4,
                   palette=VENDOR_COLORS, legend=False)
 
-    ax_violin.set_title('理由文長の分布と個別データ点')
-    ax_violin.set_xlabel('理由の種類')
-    ax_violin.set_ylabel('文字数')
+    ax_violin.set_title(messages['distribution_plot_title'])
+    ax_violin.set_xlabel(messages['xlabel'])
+    ax_violin.set_ylabel(messages['ylabel'])
     ax_violin.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
 
     # バイオリンプロットの凡例を調整
@@ -237,37 +223,63 @@ def create_distribution_plot(filtered_data, reason_dimensions):
                       alpha=VISUALIZATION_CONFIG['plot']['text_box_alpha'], label=vendor)
                       for vendor, color in VENDOR_COLORS.items()]
     ax2.legend(handles=legend_elements, 
-              title='開発元', 
+              title=messages['vendor_legend_title'], 
               loc='center', 
               ncol=len(VENDOR_COLORS),
               bbox_to_anchor=(0.5, 0.5))
 
     # レイアウトの調整
     plt.subplots_adjust(right=0.85, hspace=0.3)
-    save_figure(plt, "model_reason_distribution")
+    save_figure(plt, "model_reason_distribution", lang=lang)
     plt.close()
 
-# グラフを生成
-create_bar_plot(filtered_data, reason_dimensions)
-create_distribution_plot(filtered_data, reason_dimensions)
-create_sorted_all_plot(filtered_data, reason_dimensions)
-create_sorted_individual_plots(filtered_data, reason_dimensions)
+def main(lang='ja'):
+    """メイン処理"""
+    # 出力ディレクトリを作成
+    ensure_output_directories()
 
-# 開発元ごとの平均値を計算して表示
-print("\n開発元ごとの理由文長平均値:")
-vendor_means = filtered_data.groupby('vendor')[list(reason_dimensions.keys())].mean()
-for vendor in vendor_means.index:
-    print(f"\n{vendor}:")
-    for col, label in reason_dimensions.items():
-        print(f"  {label}: {vendor_means.loc[vendor, col]:.2f}")
+    # CSVファイルからデータを読み込む
+    df = pd.read_csv(f"{OUTPUT_DIR}/model_reason.csv")
 
-print("\nグラフを保存しました:")
-print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'model_reason.png')}")
-print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'model_reason.svg')}")
-print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'model_reason_distribution.png')}")
-print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'model_reason_distribution.svg')}")
-print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'model_reason_sorted_all.png')}")
-print(f"- {os.path.join(OUTPUT_DIR, 'figures', 'model_reason_sorted_all.svg')}")
-for i in range(1, 5):
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', f'model_reason_sorted_q{i}.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', f'model_reason_sorted_q{i}.svg')}")
+    # データをモデル順序に基づいて並べ替え
+    filtered_data = df.set_index('model').reindex(MODEL_ORDER).reset_index()
+
+    # 開発元情報を追加
+    filtered_data['vendor'] = filtered_data['model'].apply(get_vendor)
+
+    # 言語に応じたメッセージを読み込む
+    # messages = load_messages(lang) # messagesは他の場所で使用されているため残す
+    # 言語に応じた理由文の定義を使用
+    reasons = get_message('common.reason_dimensions', lang)
+
+    # グラフを生成
+    create_bar_plot(filtered_data, reasons, lang)
+    create_distribution_plot(filtered_data, reasons, lang)
+    create_sorted_all_plot(filtered_data, reasons, lang)
+    create_sorted_individual_plots(filtered_data, reasons, lang)
+
+    # 開発元ごとの平均値を計算して表示
+    print("\n開発元ごとの理由文長平均値:")
+    vendor_means = filtered_data.groupby('vendor')[list(reasons.keys())].mean()
+    for vendor in vendor_means.index:
+        print(f"\n{vendor}:")
+        for col, label in reasons.items():
+            print(f"  {label}: {vendor_means.loc[vendor, col]:.2f}")
+
+    lang_dir = 'ja' if lang == 'ja' else 'en'
+    print(f"\n言語 {lang} のグラフを保存しました:")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason.png')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_distribution.png')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_distribution.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_sorted_all.png')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_sorted_all.svg')}")
+    for i in range(1, 5):
+        print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, f'model_reason_sorted_q{i}.png')}")
+        print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, f'model_reason_sorted_q{i}.svg')}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Generate visualization for model reason data.')
+    parser.add_argument('--lang', choices=['ja', 'en'], default='ja', help='Language for visualization (ja/en)')
+    args = parser.parse_args()
+    main(args.lang)

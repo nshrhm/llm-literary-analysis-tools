@@ -18,7 +18,8 @@ The automation of sentiment analysis in literature holds significant potential f
 
 - **Emotion Analysis Across Multiple Dimensions**: Evaluates Japanese literary works ("Kaichu Tokei", "Okane to Pistol", "Boroboro na Dachou") on four emotional dimensions (amusement, surprise, sadness, anger).
 - **Comparative Studies**: Analyzes the impact of different models, personas, and temperature settings on emotional evaluations.
-- **Visualization Tools**: Generates publication-ready graphs in PNG and SVG formats, with proper Japanese font support using `japanize_matplotlib`.
+- **Visualization Tools**: Generates publication-ready graphs in PNG and SVG formats, with proper Japanese font support using `japanize_matplotlib`. Graph fonts, colors, and styles are centrally managed in `src/config.py` for enhanced readability and maintainability.
+- **Language Switching Functionality**: Utilizes messages defined in `src/messages.json` to switch between Japanese and English graph outputs via command-line options.
 - **Modular Analysis Scripts**: Includes series such as `model_emotion`, `text_emotion`, `persona_emotion`, `temperature_emotion`, and more, each focusing on specific aspects of the data.
 
 ## Installation
@@ -42,18 +43,35 @@ To use these tools, you'll need to have Python 3.x installed along with the requ
 
 ## Usage
 
-To run the full suite of analysis scripts and generate results:
+To run the full suite of analysis scripts and generate results, execute one of the following scripts:
+
+- **Generate Japanese graphs**:
+   ```bash
+   bash make_result_ja.sh
+   ```
+- **Generate English graphs**:
+   ```bash
+   bash make_result_en.sh
+   ```
+
+These scripts execute all analysis and visualization scripts. Individual scripts in the `src/` directory can also be run separately for specific analyses.
+
+For individual visualization scripts (`model_emotion_visualize.py`, `text_emotion_visualize.py`, `persona_emotion_visualize.py`, `temperature_emotion_visualize.py`, etc.), you can specify the language for the generated graphs using the `--lang` option:
 
 ```bash
-bash make_result.sh
+python ./src/<script_name>.py [--lang {ja,en}]
 ```
 
-This script executes all analysis and visualization scripts, saving CSV files to the `results/` directory and graphs to `results/figures/`. Individual scripts in the `src/` directory can also be run separately for specific analyses.
+- `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
 
 For detailed information on each script, refer to the [Data Analysis Scripts Guide](docs/analysis_scripts_guide.md).
 
 - **CSV Outputs**: Statistical results and data extracts are saved in `results/`.
 - **Figures**: Graphs are saved in `results/figures/` in both PNG (for Microsoft Word) and SVG (for LaTeX) formats.
+  - `results/figures/ja/`: Japanese graphs
+  - `results/figures/en/`: English graphs
 
 ## Directory Structure
 

@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from config import (
-    OUTPUT_DIR, EMOTION_DIMENSIONS, DATA_PATHS,
+    OUTPUT_DIR, ANALYSIS_COLUMNS, DATA_PATHS,
     ensure_output_directories, safe_read_csv
 )
 
@@ -17,14 +17,14 @@ def analyze_persona_emotion_trends():
         return
     
     # ペルソナとモデルの組み合わせごとに感情次元の傾向を計算
-    emotion_trends = df.groupby(['persona', 'model'])[list(EMOTION_DIMENSIONS.keys())].mean()
+    emotion_trends = df.groupby(['persona', 'model'])[ANALYSIS_COLUMNS['values']].mean()
     
     # 結果をCSVファイルに保存
     output_file = os.path.join(OUTPUT_DIR, "persona_emotion.csv")
     emotion_trends.to_csv(output_file)
     
     # ペルソナごとの平均感情値も計算
-    persona_averages = df.groupby('persona')[list(EMOTION_DIMENSIONS.keys())].mean()
+    persona_averages = df.groupby('persona')[ANALYSIS_COLUMNS['values']].mean()
     persona_output_file = os.path.join(OUTPUT_DIR, "persona_emotion_average.csv")
     persona_averages.to_csv(persona_output_file)
     
