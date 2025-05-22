@@ -7,10 +7,22 @@
       "Q4value": "怒り"
     },
     "reason_dimensions": {
-      "Q1reason": "面白さの理由",
-      "Q2reason": "驚きの理由",
-      "Q3reason": "悲しみの理由",
-      "Q4reason": "怒りの理由"
+      "Q1reason": {
+        "ja": "面白さの理由",
+        "en": "Reason for Interest"
+      },
+      "Q2reason": {
+        "ja": "驚きの理由",
+        "en": "Reason for Surprise"
+      },
+      "Q3reason": {
+        "ja": "悲しみの理由",
+        "en": "Reason for Sadness"
+      },
+      "Q4reason": {
+        "ja": "怒りの理由",
+        "en": "Reason for Anger"
+      }
     },
     "persona_mapping": {
       "p1": "大学1年生",

@@ -53,7 +53,7 @@ def create_bar_plot(filtered_data, reasons, lang='ja'):
     # 各モデルのデータをプロット
     bar_width = 0.2
     x = range(len(filtered_data['model']))
-    for i, (col, label) in enumerate(reasons.items()):
+    for i, (col, label_dict) in enumerate(reasons.items()):
         bars = ax1.bar([p + i * bar_width for p in x], filtered_data[col], 
                        bar_width)
         
@@ -166,9 +166,9 @@ def create_sorted_all_plot(filtered_data, reasons, lang='ja'):
 def create_sorted_individual_plots(filtered_data, reasons, lang='ja'):
     """各理由文ごとにソートしたグラフを作成"""
     messages = load_messages(lang) # messagesは他の場所で使用されているため残す
-    for i, (col, label) in enumerate(reasons.items(), 1):
+    for i, (col, label_dict) in enumerate(reasons.items(), 1):
         sorted_data = filtered_data.sort_values(col, ascending=False)
-        title = messages['sorted_individual_plot_title'].format(reason_label=label)
+        title = messages['sorted_individual_plot_title'].format(reason_label=label_dict[lang])
         create_sorted_bar_plot(
             sorted_data,
             title,
@@ -179,7 +179,7 @@ def create_sorted_individual_plots(filtered_data, reasons, lang='ja'):
 
 def create_distribution_plot(filtered_data, reasons, lang='ja'):
     """バイオリンプロットとスウォームプロットによる分布の可視化"""
-    messages = load_messages(lang) # messagesは他の場所で使用されているため残す
+    messages = load_messages(lang) # messagesは他の場所で
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(2, 1, height_ratios=[4, 1])
 
@@ -194,7 +194,9 @@ def create_distribution_plot(filtered_data, reasons, lang='ja'):
                           value_name='length')
 
     # 理由ラベルを言語に応じて変換
-    melted_data['reason_type'] = melted_data['reason_type'].map(reasons)
+    melted_data['reason_type'] = melted_data['reason_type'].map(
+        {col: label_dict[lang] for col, label_dict in reasons.items()}
+    )
 
     # バイオリンプロット
     sns.violinplot(data=melted_data, x='reason_type', y='length', hue='vendor',
@@ -263,8 +265,8 @@ def main(lang='ja'):
     vendor_means = filtered_data.groupby('vendor')[list(reasons.keys())].mean()
     for vendor in vendor_means.index:
         print(f"\n{vendor}:")
-        for col, label in reasons.items():
-            print(f"  {label}: {vendor_means.loc[vendor, col]:.2f}")
+        for col, label_dict in reasons.items():
+            print(f"  {label_dict[lang]}: {vendor_means.loc[vendor, col]:.2f}")
 
     lang_dir = 'ja' if lang == 'ja' else 'en'
     print(f"\n言語 {lang} のグラフを保存しました:")
