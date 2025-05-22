@@ -1,0 +1,65 @@
+# Cline Rules for LLM Literary Analysis Tools Project
+
+## プロジェクト概要
+- **名称**: LLMを用いた日本語文学作品の感情分析ツール作成プロジェクト
+- **目的**: 複数の大規模言語モデル（LLM）を用いて日本語文学作品を感情次元（面白さ、驚き、悲しみ、怒り）で自動評価し、モデル間での結果を比較する実験基盤を構築した。そこから得られたデータを分析することが目的である。
+- **主要目標**: data_all.csv から学術論文に掲載できる基準の新たな知見を発見すること。詳細なプロジェクト背景やスコープは「memory-bank/projectbrief.md」を参照。
+- **分析項目**: 以下はdata_all.csvの列ラベルである。これを元にプログラムを作成する。
+```csv
+timestamp,text,developer,model,persona,temperature,trial,Q1value,Q2value,Q3value,Q4value,Q1reason,Q2reason,Q3reason,Q4reason
+```
+
+## 分析の種類
+1. missing_values シリーズ:
+  - 先頭が missing_values で始まるファイルのプログラムは欠損値について調査する。これは各LLMの意図した出力を生成できるかも問うものである。
+2. model_emotion シリーズ:
+  - 先頭が model_emotion で始まるファイルのプログラムはモデル(model)と感情次元数値 (emotion: Q1value,Q2value,Q3value,Q4value)との関係を分析する。
+3. model_reason シリーズ:
+  - 先頭が model_reason で始まるファイルのプログラムはモデル(model)と感情次元数値の理由 (reason: Q1reason,Q2reason,Q3reason,Q4reason)との関係を生成文字列長に着目して分析する。
+4. text_emotion シリーズ:
+  - 先頭が text_emotion で始まるファイルのプログラムは文学作品(text)と感情次元数値 (emotion: Q1value,Q2value,Q3value,Q4value)との関係を分析する。
+5. text_reason シリーズ:
+  - 先頭が text_reason で始まるファイルのプログラムは文学作品(text)と感情次元数値の理由 (reason: Q1reason,Q2reason,Q3reason,Q4reason)との関係を生成文字列長に着目して分析する。
+6. persona_emotion シリーズ:
+  - 先頭が persona_emotion で始まるファイルのプログラムはペルソナ(persona)と感情次元数値 (emotion: Q1value,Q2value,Q3value,Q4value)との関係を分析する。
+7. persona_reason シリーズ:
+  - 先頭が persona_reason で始まるファイルのプログラムはペルソナ(persona)と感情次元数値の理由 (reason: Q1reason,Q2reason,Q3reason,Q4reason)との関係を生成文字列長に着目して分析する。
+8. temperature_emotion シリーズ:
+  - 先頭が templature_emotion で始まるファイルのプログラムはtemperatureと感情次元数値 (emotion: Q1value,Q2value,Q3value,Q4value)との関係を分析する。
+9. temperature_reason シリーズ:
+  - 先頭が templature_reason で始まるファイルのプログラムはtemperatureと感情次元数値の理由 (reason: Q1reason,Q2reason,Q3reason,Q4reason)との関係を生成文字列長に着目して分析する。
+
+## 分析の手順
+- 上記の分析の種類に対して、以下の手順で分析するプログラムを作成する。これはファイル名の命名基準でもある。「*」には上記のシリーズ名が入る。
+  1. *_analysis.py: data_all.csv から必要なファイルを抜き出す。
+  2. *_statistics.py: *_analysis.pyが生成したcsvファイルや、data_all.csvから要約統計量を計算してcsvファイルに保存する。
+  3. *_visualize.py: *_analysis.py, *_statistics.pyが生成したcsvファイルや、data_all.csvから学術論文掲載に適したグラフを作図しpng/svg形式で保存する。
+    - png形式はMicrosoft Wordのため、svg形式はLaTeXのためである。
+  4. 出力ファイルは元のプログラム名に準じたファイル名とし、必要に応じて単語を末尾に追記する。
+  5. csvファイルはresultsフォルダに、画像はresults/figuresフォルダに保存する。
+
+## ツール
+- 分析作業に便利なツールとなるプログラムも作成する。現在作成したツールは以下の通り
+  - csv_to_tsv_converter.py: csvファイル群から新たにtsvファイル群を作成する。tsv形式のコピー＆ペーストはExcelに貼りやすいため。
+  - make_result.sh: 全プログラムを実行する。
+
+## 視覚化プログラムの原則
+- **日本語フォント対応**:
+  - Pythonで視覚化プログラムを作成する際は、日本語フォント対応のために必ず `import japanize_matplotlib` を使用する。
+  - このライブラリを使用することで、matplotlibでの日本語表示が適切に行われる。
+  - 必要に応じて、ライブラリのインストール手順を明記する（例：`pip install japanize-matplotlib`）。
+- **X軸の順序**:
+  - 視覚化プログラムで文学作品をX軸にプロットする際は、'src/config.py' に基づいて '懐中時計', 'お金とピストル', 'ぼろぼろな駝鳥' の順に設定する。
+- **バイオリンプロットの視認性**:
+  - バイオリンプロットの内部を透明にし、外枠線を強調するために `sns.violinplot` に `fill=False` と `linewidth=2.0` を設定する。
+
+## 補足
+- 本ファイルはプロジェクトの学習ジャーナルとして、Clineがプログラム開発を効果的に進めるための知見を記録するものです。プロジェクトの進捗やユーザーのフィードバックに応じて随時更新されます。
+- 詳細な進捗状況や技術的なフレームワークについては、Memory Bankの各ファイル（memory-bank/activeContext.md, memory-bank/progress.md, memory-bank/techContext.md）を参照。
+
+## ドキュメント整備の方針
+- 今後のドキュメント整備は、日本語版（例：docs/analysis_scripts_guide_ja.md）と英語版（例：docs/analysis_scripts_guide.md）の両方を更新することを必須とする。国際学術誌への論文投稿を考慮し、英語版ドキュメントの整備を怠らないよう注意する。
+
+## 今後の目標
+- 国際学術誌への論文投稿のため、英語記載のグラフ画像生成機能の追加。メッセージファイルを準備し、言語別実行時コマンドラインオプションを指定して、出力する英語画像と日本語画像を切り分ける機能を追加する。
+- プログラムの共通化を進めるため、src/config.pyに共通コードをまとめる作業を実施中。

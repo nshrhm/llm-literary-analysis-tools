@@ -1,0 +1,84 @@
+{
+  "cluster_1": {
+    "size": 12,
+    "mean": {
+      "Q1value": 75.45507154882155,
+      "Q2value": 57.86216931216931,
+      "Q3value": 25.333748070004333,
+      "Q4value": 27.624281947627537
+    },
+    "std": {
+      "Q1value": 4.913902651835449,
+      "Q2value": 10.064299321582855,
+      "Q3value": 7.327447205703986,
+      "Q4value": 7.419228797115823
+    },
+    "models": [
+      "Llama-4-Maverick-17B",
+      "Llama-4-Scout-17B",
+      "Qwen2.5-VL-7B-Instruct",
+      "Qwen3-235B-A22B-FP8",
+      "claude-3-5-haiku-20241022",
+      "gemini-2.0-flash-lite",
+      "gemma-3-4b-it",
+      "gpt-4.1-nano",
+      "gpt-4o",
+      "gpt-4o-mini",
+      "grok-2-latest",
+      "o3-mini"
+    ],
+    "center": [
+      71.71194869211877,
+      58.995828113936085,
+      28.58977750719245,
+      29.80946271572779
+    ]
+  },
+  "cluster_2": {
+    "size": 24,
+    "mean": {
+      "Q1value": 60.565698092828264,
+      "Q2value": 59.37433789258241,
+      "Q3value": 37.519531185487836,
+      "Q4value": 37.358111314487985
+    },
+    "std": {
+      "Q1value": 4.666962176633246,
+      "Q2value": 9.113022174448627,
+      "Q3value": 9.157136581819053,
+      "Q4value": 9.061468875091377
+    },
+    "models": [
+      "DeepSeek-R1",
+      "DeepSeek-V3",
+      "DeepSeek-V3-0324",
+      "Llama-3.3-70B-Instruct-Turbo",
+      "claude-3-5-sonnet-20241022",
+      "claude-3-7-sonnet-20250219",
+      "claude-3-haiku-20240307",
+      "gemini-2.0-flash",
+      "gemini-2.0-flash-thinking-exp",
+      "gemini-2.0-pro-exp",
+      "gemini-2.5-flash-preview-04-17",
+      "gemini-2.5-pro-preview-03-25",
+      "gemma-3-12b-it",
+      "gemma-3-1b-it",
+      "gemma-3-27b-it",
+      "gpt-4.1",
+      "gpt-4.1-mini",
+      "grok-3-fast-latest",
+      "grok-3-latest",
+      "grok-3-mini-fast-latest",
+      "grok-3-mini-latest",
+      "o1-mini",
+      "o3",
+      "o4-mini"
+    ],
+    "center": [
+      61.36882817499534,
+      58.786168068449896,
+      36.63864994268623,
+      36.80875863020824
+    ]
+  }
+}
