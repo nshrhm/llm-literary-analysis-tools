@@ -253,7 +253,25 @@ This document provides an overview of the main data analysis Python scripts used
   - `results/figures/persona_emotion_distribution.svg`: Same as above (SVG format)
 - **Note**: It is recommended to run `src/persona_emotion_visualize.py` after executing `src/persona_emotion_analysis.py`.
 
-### 22. `src/persona_emotion_similarity.py`
+### 22. `src/persona_model_emotion.py`
+- **Description**: Analyzes and visualizes the relationship between personas and emotional dimensions for each model. Displays persona evaluation values for each model as bar charts for each emotional dimension (Q1-Q4).
+- **Execution**: Run the following command from the project root directory.
+  ```bash
+  python ./src/persona_model_emotion.py [--lang {ja,en}]
+  ```
+- **Options**:
+  - `--lang`: Language for visualization (default: ja)
+    - `ja`: Japanese
+    - `en`: English
+- **Generated Files**: 
+  - `results/figures/en/persona_model_emotion_q1.png`, `results/figures/en/persona_model_emotion_q1.svg`
+  - `results/figures/en/persona_model_emotion_q2.png`, `results/figures/en/persona_model_emotion_q2.svg`
+  - `results/figures/en/persona_model_emotion_q3.png`, `results/figures/en/persona_model_emotion_q3.svg`
+  - `results/figures/en/persona_model_emotion_q4.png`, `results/figures/en/persona_model_emotion_q4.svg`
+  - (Japanese versions in `results/figures/ja/`)
+- **Note**: This script reads `data_all.csv` directly.
+
+### 23. `src/persona_emotion_similarity.py`
 - **Description**: Analyzes the similarity of emotional patterns between personas using correlation analysis and radar chart visualization.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -273,7 +291,7 @@ This document provides an overview of the main data analysis Python scripts used
      - `results/figures/persona_emotion_patterns.svg`: Same as above (SVG format)
 - **Note**: It is recommended to run `src/persona_emotion_similarity.py` after executing `src/persona_emotion_analysis.py`.
 
-### 23. `src/persona_reason_analysis.py`
+### 24. `src/persona_reason_analysis.py`
 - **Description**: Reads experimental result data (`data_all.csv`) and analyzes the trend of character counts in reason texts per persona.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -283,7 +301,7 @@ This document provides an overview of the main data analysis Python scripts used
   - `results/persona_reason.csv`: Character counts of reason texts per combination of persona and model
   - `results/persona_reason_average.csv`: Average character counts of reason texts per persona
 
-### 24. `src/persona_reason_statistics.py`
+### 25. `src/persona_reason_statistics.py`
 - **Description**: Reads analysis data (`results/persona_reason.csv`) and calculates basic statistics for character counts in reason texts per persona.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -292,7 +310,7 @@ This document provides an overview of the main data analysis Python scripts used
 - **Generated Files**: `results/persona_reason_statistics.csv`
 - **Note**: It is recommended to run `src/persona_reason_statistics.py` after executing `src/persona_reason_analysis.py`.
 
-### 25. `src/persona_reason_visualize.py`
+### 26. `src/persona_reason_visualize.py`
 - **Description**: Reads analysis data (`results/persona_reason.csv`) and visually represents the character counts in reason texts per persona.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -305,7 +323,7 @@ This document provides an overview of the main data analysis Python scripts used
   - `results/figures/persona_reason_distribution.svg`: Same as above (SVG format)
 - **Note**: It is recommended to run `src/persona_reason_visualize.py` after executing `src/persona_reason_analysis.py`.
 
-### 26. `src/persona_reason_similarity.py`
+### 27. `src/persona_reason_similarity.py`
 - **Description**: Analyzes the similarity of character count patterns in reason texts between personas using correlation analysis and radar chart visualization.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -325,7 +343,7 @@ This document provides an overview of the main data analysis Python scripts used
      - `results/figures/persona_reason_patterns.svg`: Same as above (SVG format)
 - **Note**: It is recommended to run `src/persona_reason_similarity.py` after executing `src/persona_reason_analysis.py`.
 
-### 27. `src/temperature_emotion_analysis.py`
+### 28. `src/temperature_emotion_analysis.py`
 - **Description**: Reads experimental result data (`data_all.csv`) and calculates changes in emotional dimensions based on temperature settings.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -334,7 +352,7 @@ This document provides an overview of the main data analysis Python scripts used
 - **Generated Files**: `results/temperature_emotion.csv`
 - **Note**: This script assumes that experimental result data exists in `data_all.csv`.
 
-### 28. `src/temperature_emotion_statistics.py`
+### 29. `src/temperature_emotion_statistics.py`
 - **Description**: Reads experimental result data (`data_all.csv`) and calculates statistical metrics for emotional dimensions based on temperature settings.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -343,7 +361,7 @@ This document provides an overview of the main data analysis Python scripts used
 - **Generated Files**: `results/temperature_emotion_statistics.csv`
 - **Note**: This script assumes that experimental result data exists in `data_all.csv`.
 
-### 29. `src/temperature_emotion_visualize.py`
+### 30. `src/temperature_emotion_visualize.py`
 - **Description**: Reads analysis data (`results/temperature_emotion.csv` and `results/temperature_emotion_statistics.csv`) and visually represents changes in emotional values based on temperature.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -355,7 +373,7 @@ This document provides an overview of the main data analysis Python scripts used
   - Graphs with standard deviation: `results/figures/temperature_emotion_{dimension}_std_selected.png`, `results/figures/temperature_emotion_{dimension}_std_selected.svg`
 - **Note**: It is recommended to run `src/temperature_emotion_visualize.py` after executing `src/temperature_emotion_analysis.py` and `src/temperature_emotion_statistics.py`.
 
-### 30. `src/temperature_reason_analysis.py`
+### 31. `src/temperature_reason_analysis.py`
 - **Description**: Reads experimental result data (`data_all.csv`) and calculates changes in generated text volume (character count of reasons) based on temperature settings.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -366,7 +384,7 @@ This document provides an overview of the main data analysis Python scripts used
   - `results/temperature_reason_detailed.csv`: Detailed analysis of text volume per emotional dimension
 - **Note**: This script assumes that experimental result data exists in `data_all.csv`.
 
-### 31. `src/temperature_reason_visualize.py`
+### 32. `src/temperature_reason_visualize.py`
 - **Description**: Reads experimental result data (`data_all.csv`) and analyzes and visualizes the diversity and similarity of generated text based on temperature.
 - **Execution**: Run the following command from the project root directory.
   ```bash
@@ -381,7 +399,7 @@ This document provides an overview of the main data analysis Python scripts used
   - Graphs: `results/figures/temperature_reason_correlation_diversity_sorted.png`, `results/figures/temperature_reason_correlation_diversity_sorted.svg`
 - **Note**: This script assumes that experimental result data exists in `data_all.csv`.
 
-### 32. `src/create_data_sample.py`
+### 33. `src/create_data_sample.py`
 - **Description**: Reads experimental result data (`data_all.csv`), extracts data with trial values from 1 to 3, and saves it as sample data.
 - **Execution**: Run the following command from the project root directory.
   ```bash

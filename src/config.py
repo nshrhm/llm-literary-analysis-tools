@@ -183,6 +183,14 @@ VENDOR_PATTERNS = {
     'Grok': ['grok-']
 }
 
+# ペルソナの色定義
+PERSONA_COLORS = {
+    'p1': '#4285F4',  # 大学1年生：明るく若々しい青
+    'p2': '#34A853',  # 文学研究者：知性を表す緑
+    'p3': '#EA4335',  # 感情豊かな詩人：情熱的な赤
+    'p4': '#9E9E9E'   # 無感情なロボット：機械的なグレー
+}
+
 # モデル開発元の色の定義
 VENDOR_COLORS = {
     'OpenAI': '#4285F4',  # Google Blue
@@ -194,6 +202,38 @@ VENDOR_COLORS = {
     'Gemma': '#FF69B4',    # Hot Pink
     'Grok': '#A0522D'      # Sienna
 }
+
+import colorsys
+
+# 感情次元の色の定義は削除し、動的に生成する関数を追加
+
+def get_emotion_color_from_persona_base(base_color_hex, emotion_index):
+    """
+    ペルソナの基調色をベースに、感情次元のインデックスに応じた明度の色を生成する。
+    emotion_index: 0 (Interest), 1 (Surprise), 2 (Sadness), 3 (Anger)
+    """
+    # 16進数カラーコードをRGB (0-1) に変換
+    base_rgb = tuple(int(base_color_hex[i:i+2], 16) / 255.0 for i in (1, 3, 5))
+    
+    # RGBをHLSに変換
+    h, l, s = colorsys.rgb_to_hls(*base_rgb)
+    
+    # 明度 (L) を感情次元のインデックスに応じて調整
+    # 明るい色から暗い色へ
+    if emotion_index == 0: # Interest (明るい)
+        l_adjusted = min(1.0, l + 0.15) # 明度を少し下げる
+    elif emotion_index == 1: # Surprise (やや明るい)
+        l_adjusted = min(1.0, l + 0.05) # 明度を少し上げる
+    elif emotion_index == 2: # Sadness (やや暗い)
+        l_adjusted = max(0.0, l - 0.05) # 明度を少し下げる
+    elif emotion_index == 3: # Anger (暗い)
+        l_adjusted = max(0.0, l - 0.2) # 明度を下げる
+    else:
+        l_adjusted = l # デフォルト
+        
+    # HLSをRGBに変換し、16進数カラーコードに戻す
+    r, g, b = colorsys.hls_to_rgb(h, l_adjusted, s)
+    return '#%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
 
 # モデルの順序定義
 MODEL_ORDER = [

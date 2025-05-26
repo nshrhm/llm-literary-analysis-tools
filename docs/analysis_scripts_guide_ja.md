@@ -253,7 +253,25 @@
   - `results/figures/persona_emotion_distribution.svg`: 同上（SVG形式）
 - **注意**: `src/persona_emotion_visualize.py` は、 `src/persona_emotion_analysis.py` を実行した後に実行することを推奨します。
 
-### 22. `src/persona_emotion_similarity.py`
+### 22. `src/persona_model_emotion.py`
+- **説明**: ペルソナと感情次元の関係をモデルごとに分析・可視化します。各感情次元（Q1-Q4）について、モデルごとのペルソナの評価値を棒グラフで表示します。
+- **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
+  ```bash
+  python ./src/persona_model_emotion.py [--lang {ja,en}]
+  ```
+- **オプション**:
+  - `--lang`: 可視化時の言語 (デフォルト: ja)
+    - `ja`: 日本語
+    - `en`: 英語
+- **生成されるファイル**: 
+  - `results/figures/ja/persona_model_emotion_q1.png`, `results/figures/ja/persona_model_emotion_q1.svg`
+  - `results/figures/ja/persona_model_emotion_q2.png`, `results/figures/ja/persona_model_emotion_q2.svg`
+  - `results/figures/ja/persona_model_emotion_q3.png`, `results/figures/ja/persona_model_emotion_q3.svg`
+  - `results/figures/ja/persona_model_emotion_q4.png`, `results/figures/ja/persona_model_emotion_q4.svg`
+  - (英語版は `results/figures/en/` に保存されます)
+- **注意**: このスクリプトは `data_all.csv` を直接読み込みます。
+
+### 23. `src/persona_emotion_similarity.py`
 - **説明**: ペルソナ間の感情パターンの類似性を分析します。相関分析とレーダーチャートによる可視化を行います。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -273,7 +291,7 @@
      - `results/figures/persona_emotion_patterns.svg`: 同上（SVG形式）
 - **注意**: `src/persona_emotion_similarity.py`は、`src/persona_emotion_analysis.py`を実行した後に実行することを推奨します。
 
-### 23. `src/persona_reason_analysis.py`
+### 24. `src/persona_reason_analysis.py`
 - **説明**: 実験結果データ (`data_all.csv`) を読み込み、ペルソナごとの理由生成文の文字数の傾向を分析します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -283,7 +301,7 @@
   - `results/persona_reason.csv`: ペルソナとモデルの組み合わせごとの理由文長
   - `results/persona_reason_average.csv`: ペルソナごとの平均理由文長
 
-### 24. `src/persona_reason_statistics.py`
+### 25. `src/persona_reason_statistics.py`
 - **説明**: 分析データ (`results/persona_reason.csv`) を読み込み、ペルソナごとの理由文長の基本統計量を計算します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -292,7 +310,7 @@
 - **生成されるファイル**: `results/persona_reason_statistics.csv`
 - **注意**: `src/persona_reason_statistics.py`は、`src/persona_reason_analysis.py`を実行した後に実行することを推奨します。
 
-### 25. `src/persona_reason_visualize.py`
+### 26. `src/persona_reason_visualize.py`
 - **説明**: 分析データ (`results/persona_reason.csv`) を読み込み、ペルソナごとの理由文長を視覚的に表現します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -305,7 +323,7 @@
   - `results/figures/persona_reason_distribution.svg`: 同上（SVG形式）
 - **注意**: `src/persona_reason_visualize.py` は、`src/persona_reason_analysis.py` を実行した後に実行することを推奨します。
 
-### 26. `src/persona_reason_similarity.py`
+### 27. `src/persona_reason_similarity.py`
 - **説明**: ペルソナ間の理由文長パターンの類似性を分析します。相関分析とレーダーチャートによる可視化を行います。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -325,7 +343,7 @@
      - `results/figures/persona_reason_patterns.svg`: 同上（SVG形式）
 - **注意**: `src/persona_reason_similarity.py`は、`src/persona_reason_analysis.py`を実行した後に実行することを推奨します。
 
-### 27. `src/temperature_emotion_analysis.py`
+### 28. `src/temperature_emotion_analysis.py`
 - **説明**: 実験結果データ (`data_all.csv`) を読み込み、temperature設定による感情次元の変化を計算します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -334,7 +352,7 @@
 - **生成されるファイル**: `results/temperature_emotion.csv`
 - **注意**: このスクリプトは、実験結果データが `data_all.csv` に存在することを前提としています。
 
-### 28. `src/temperature_emotion_statistics.py`
+### 29. `src/temperature_emotion_statistics.py`
 - **説明**: 実験結果データ (`data_all.csv`) を読み込み、temperature設定による感情次元の統計的指標を計算します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -343,7 +361,7 @@
 - **生成されるファイル**: `results/temperature_emotion_statistics.csv`
 - **注意**: このスクリプトは、実験結果データが `data_all.csv` に存在することを前提としています。
 
-### 29. `src/temperature_emotion_visualize.py`
+### 30. `src/temperature_emotion_visualize.py`
 - **説明**: 分析データ (`results/temperature_emotion.csv` および `results/temperature_emotion_statistics.csv`) を読み込み、temperatureによる感情値の変化を視覚的に表現します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -355,7 +373,7 @@
   - 標準偏差付きグラフ: `results/figures/temperature_emotion_{dimension}_std_selected.png`, `results/figures/temperature_emotion_{dimension}_std_selected.svg`
 - **注意**: `src/temperature_emotion_visualize.py` は、`src/temperature_emotion_analysis.py` および `src/temperature_emotion_statistics.py` を実行した後に実行することを推奨します。
 
-### 30. `src/temperature_reason_analysis.py`
+### 31. `src/temperature_reason_analysis.py`
 - **説明**: 実験結果データ (`data_all.csv`) を読み込み、temperature設定による生成テキスト量（理由の文字数）の変化を計算します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -366,7 +384,7 @@
   - `results/temperature_reason_detailed.csv`: 各感情次元ごとのテキスト量の詳細分析
 - **注意**: このスクリプトは、実験結果データが `data_all.csv` に存在することを前提としています。
 
-### 31. `src/temperature_reason_visualize.py`
+### 32. `src/temperature_reason_visualize.py`
 - **説明**: 実験結果データ (`data_all.csv`) を読み込み、temperatureによる生成テキストの多様性や類似度を分析し視覚化します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
@@ -381,7 +399,7 @@
   - グラフ: `results/figures/temperature_reason_correlation_diversity_sorted.png`, `results/figures/temperature_reason_correlation_diversity_sorted.svg`
 - **注意**: このスクリプトは、実験結果データが `data_all.csv` に存在することを前提としています。
 
-### 32. `src/create_data_sample.py`
+### 33. `src/create_data_sample.py`
 - **説明**: 実験結果データ (`data_all.csv`) を読み込み、trial値が1から3までのデータを抽出し、サンプルデータとして保存します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash

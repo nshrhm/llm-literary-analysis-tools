@@ -1,10 +1,64 @@
 {
+  "persona_emotion": {
+    "ja": {
+      "header_text": "ペルソナごとの感情次元平均値",
+      "xlabel": "ペルソナ",
+      "ylabel": "値",
+      "emotion_legend_title": "感情次元",
+      "bar_plot_title": "ペルソナごとの感情次元評価",
+      "distribution_plot_title": "ペルソナごとの感情分布",
+      "emotion_xlabel": "ペルソナ",
+      "emotion_ylabel": "感情値"
+    },
+    "en": {
+      "header_text": "Average Emotional Dimension Values by Persona",
+      "xlabel": "Persona",
+      "ylabel": "Value",
+      "emotion_legend_title": "Emotional Dimension",
+      "bar_plot_title": "Emotional Dimension Evaluation by Persona",
+      "distribution_plot_title": "Emotion Distribution by Persona",
+      "emotion_xlabel": "Persona",
+      "emotion_ylabel": "Emotion Value"
+    }
+  },
+  "persona_model_emotion": {
+    "ja": {
+      "title": "{emotion}の分布（モデル・ペルソナ別）",
+      "xlabel": "モデル",
+      "ylabel": "値",
+      "legend_title": "ペルソナ"
+    },
+    "en": {
+      "title": "Distribution of {emotion} by Model and Persona",
+      "xlabel": "Model",
+      "ylabel": "Value",
+      "legend_title": "Persona",
+      "persona": {
+        "p1": "First-year Student",
+        "p2": "Literature Scholar",
+        "p3": "Emotional Poet",
+        "p4": "Emotionless Robot"
+      }
+    }
+  },
   "common": {
     "emotion_dimensions": {
-      "Q1value": "面白さ",
-      "Q2value": "驚き",
-      "Q3value": "悲しみ",
-      "Q4value": "怒り"
+      "Q1value": {
+        "ja": "面白さ",
+        "en": "Interest"
+      },
+      "Q2value": {
+        "ja": "驚き",
+        "en": "Surprise"
+      },
+      "Q3value": {
+        "ja": "悲しみ",
+        "en": "Sadness"
+      },
+      "Q4value": {
+        "ja": "怒り",
+        "en": "Anger"
+      }
     },
     "reason_dimensions": {
       "Q1reason": {
@@ -36,176 +90,6 @@
       "t3": "ぼろぼろな駝鳥"
     }
   },
-  "ja": {
-    "missing_values": {
-      "plot_title": "モデル別欠損値の割合 ({col})",
-      "xlabel": "欠損値の割合 ({col})",
-      "ylabel": "モデル",
-      "legend_title": "開発元",
-      "no_data_message": "欠損値が0のデータしかないため、グラフを生成しませんでした ({col})",
-      "saved_message": "欠損値の割合をモデルごとに視覚化したグラフを保存しました ({col})"
-    },
-    "model_emotion": {
-      "bar_plot_title": "モデルごとの感情次元の平均値比較（開発元別）",
-      "distribution_plot_title": "感情次元ごとの分布と個別データ点",
-      "header_text": "※各モデルの棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）",
-      "xlabel": "モデル",
-      "ylabel": "平均値",
-      "emotion_xlabel": "感情次元",
-      "emotion_ylabel": "値",
-      "vendor_legend_title": "開発元"
-    },
-    "text_emotion": {
-      "bar_plot_title": "文学作品ごとの感情次元の平均値比較",
-      "distribution_plot_title": "文学作品ごとの感情値分布と個別データ点",
-      "header_text": "※各文学作品の棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）",
-      "xlabel": "文学作品",
-      "ylabel": "平均感情値",
-      "emotion_xlabel": "文学作品",
-      "emotion_ylabel": "感情値",
-      "emotion_legend_title": "感情次元"
-    },
-    "persona_emotion": {
-      "bar_plot_title": "ペルソナごとの感情次元の平均値比較",
-      "distribution_plot_title": "ペルソナごとの感情値分布と個別データ点",
-      "header_text": "※各ペルソナの棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）",
-      "xlabel": "ペルソナ",
-      "ylabel": "平均感情値",
-      "emotion_xlabel": "ペルソナ",
-      "emotion_ylabel": "感情値",
-      "emotion_legend_title": "感情次元"
-    },
-    "temperature_emotion": {
-      "overall_plot_title": "Temperatureによる感情値の変化（全体平均）",
-      "model_plot_title": "Temperatureによる{emotion}の変化（全モデル）",
-      "selected_plot_title": "Temperatureによる{emotion}の変化（標準偏差付き、上位3・下位3モデル）",
-      "xlabel": "Temperature",
-      "ylabel": "感情値の平均",
-      "std_ylabel": "{emotion}の平均値 ± 標準偏差"
-    },
-    "model_reason": {
-      "bar_plot_title": "モデルごとの理由文長の比較（開発元別）",
-      "distribution_plot_title": "理由文長の分布と個別データ点",
-      "header_text": "※各モデルの棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）",
-      "xlabel": "モデル",
-      "ylabel": "文字数",
-      "vendor_legend_title": "開発元",
-      "sorted_individual_plot_title": "{reason_label}の文字数比較（開発元別、降順）"
-    },
-    "text_reason": {
-      "bar_plot_title": "文学作品ごとの理由文長の比較",
-      "distribution_plot_title": "文学作品ごとの理由文長の分布と個別データ点",
-      "header_text": "※各文学作品の棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）",
-      "xlabel": "文学作品",
-      "ylabel": "文字数",
-      "reason_legend_title": "理由の種類"
-    },
-    "persona_reason": {
-      "bar_plot_title": "ペルソナごとの理由文長の比較",
-      "distribution_plot_title": "ペルソナごとの理由文長の分布と個別データ点",
-      "header_text": "※各ペルソナの棒グラフは左から順に: 面白さ（薄）→ 驚き → 悲しみ → 怒り（濃）",
-      "xlabel": "ペルソナ",
-      "ylabel": "文字数",
-      "reason_legend_title": "理由の種類"
-    },
-    "temperature_reason": {
-      "similarity_plot_title": "Temperatureによる生成テキストの平均類似度の変化（選抜モデル）",
-      "diversity_plot_title": "Temperatureによる生成テキストの多様性スコアの変化（選抜モデル）",
-      "correlation_similarity_title": "Temperatureと生成テキストの平均類似度の相関関係（相関係数降順）",
-      "correlation_diversity_title": "Temperatureと生成テキストの多様性スコアの相関関係（相関係数降順）",
-      "xlabel": "Temperature",
-      "ylabel_similarity": "平均類似度",
-      "ylabel_diversity": "多様性スコア (1 - 平均類似度)",
-      "correlation_xlabel": "モデル",
-      "correlation_similarity_ylabel": "Temperatureと平均類似度の相関係数",
-      "correlation_diversity_ylabel": "Temperatureと多様性スコアの相関係数"
-    }
-  },
-  "en": {
-    "missing_values": {
-      "plot_title": "Proportion of Missing Values by Model ({col})",
-      "xlabel": "Proportion of Missing Values ({col})",
-      "ylabel": "Model",
-      "legend_title": "Vendor",
-      "no_data_message": "No graph generated as there is only data with 0 missing values ({col})",
-      "saved_message": "Visualized graph of missing values by model saved ({col})"
-    },
-    "model_emotion": {
-      "bar_plot_title": "Comparison of Emotional Dimensions by Model (by Vendor)",
-      "distribution_plot_title": "Distribution and Individual Data Points by Emotional Dimension",
-      "header_text": "※Bars for each model from left to right: Interesting (light) → Surprise → Sadness → Anger (dark)",
-      "xlabel": "Model",
-      "ylabel": "Mean Value",
-      "emotion_xlabel": "Emotional Dimension",
-      "emotion_ylabel": "Value",
-      "vendor_legend_title": "Vendor"
-    },
-    "text_emotion": {
-      "bar_plot_title": "Comparison of Emotional Dimensions by Literary Work",
-      "distribution_plot_title": "Distribution and Individual Data Points of Emotional Values by Literary Work",
-      "header_text": "※Bars for each literary work from left to right: Interesting (light) → Surprise → Sadness → Anger (dark)",
-      "xlabel": "Literary Work",
-      "ylabel": "Mean Emotional Value",
-      "emotion_xlabel": "Literary Work",
-      "emotion_ylabel": "Emotional Value",
-      "emotion_legend_title": "Emotional Dimension"
-    },
-    "persona_emotion": {
-      "bar_plot_title": "Comparison of Emotional Dimensions by Persona",
-      "distribution_plot_title": "Distribution and Individual Data Points of Emotional Values by Persona",
-      "header_text": "※Bars for each persona from left to right: Interesting (light) → Surprise → Sadness → Anger (dark)",
-      "xlabel": "Persona",
-      "ylabel": "Mean Emotional Value",
-      "emotion_xlabel": "Persona",
-      "emotion_ylabel": "Emotional Value",
-      "emotion_legend_title": "Emotional Dimension"
-    },
-    "temperature_emotion": {
-      "overall_plot_title": "Changes in Emotional Values by Temperature (Overall Average)",
-      "model_plot_title": "Changes in {emotion} by Temperature (All Models)",
-      "selected_plot_title": "Changes in {emotion} by Temperature (with Standard Deviation, Top 3 and Bottom 3 Models)",
-      "xlabel": "Temperature",
-      "ylabel": "Mean Emotional Value",
-      "std_ylabel": "Mean {emotion} Value ± Standard Deviation"
-    },
-    "model_reason": {
-      "bar_plot_title": "Comparison of Reason Text Length by Model (by Vendor)",
-      "distribution_plot_title": "Distribution and Individual Data Points of Reason Text Length",
-      "header_text": "※Bars for each model from left to right: Interesting (light) → Surprise → Sadness → Anger (dark)",
-      "xlabel": "Model",
-      "ylabel": "Character Count",
-      "vendor_legend_title": "Vendor",
-      "sorted_individual_plot_title": "Comparison by Character Count of {reason_label} (by Vendor, Descending)"
-    },
-    "text_reason": {
-      "bar_plot_title": "Comparison of Reason Text Length by Literary Work",
-      "distribution_plot_title": "Distribution and Individual Data Points of Reason Text Length by Literary Work",
-      "header_text": "※Bars for each literary work from left to right: Interesting (light) → Surprise → Sadness → Anger (dark)",
-      "xlabel": "Literary Work",
-      "ylabel": "Character Count",
-      "reason_legend_title": "Reason Type"
-    },
-    "persona_reason": {
-      "bar_plot_title": "Comparison of Reason Text Length by Persona",
-      "distribution_plot_title": "Distribution and Individual Data Points of Reason Text Length by Persona",
-      "header_text": "※Bars for each persona from left to right: Interesting (light) → Surprise → Sadness → Anger (dark)",
-      "xlabel": "Persona",
-      "ylabel": "Character Count",
-      "reason_legend_title": "Reason Type"
-    },
-    "temperature_reason": {
-      "similarity_plot_title": "Changes in Mean Text Similarity by Temperature (Selected Models)",
-      "diversity_plot_title": "Changes in Text Diversity Score by Temperature (Selected Models)",
-      "correlation_similarity_title": "Correlation between Temperature and Mean Text Similarity (Sorted by Correlation Coefficient)",
-      "correlation_diversity_title": "Correlation between Temperature and Text Diversity Score (Sorted by Correlation Coefficient)",
-      "xlabel": "Temperature",
-      "ylabel_similarity": "Mean Similarity",
-      "ylabel_diversity": "Diversity Score (1 - Mean Similarity)",
-      "correlation_xlabel": "Model",
-      "correlation_similarity_ylabel": "Correlation Coefficient with Temperature (Similarity)",
-      "correlation_diversity_ylabel": "Correlation Coefficient with Temperature (Diversity)"
-    }
-  },
   "model_emotion_similarity": {
     "ja": {
       "correlation_title": "モデル間の感情評価相関",
@@ -232,124 +116,6 @@
       "cluster_center_label": "Cluster Centers",
       "silhouette_xlabel": "Number of Clusters",
       "silhouette_ylabel": "Silhouette Score"
-    }
-  },
-  "model_reason_similarity": {
-    "ja": {
-      "correlation_title": "モデル間の理由文長相関",
-      "silhouette_title": "クラスター数の最適化",
-      "fcm_gradient_title": "Fuzzy C-Means クラスタリング結果\n（理由文長パターンに基づく分類）",
-      "fcm_membership_title": "Fuzzy C-Means クラスタリング結果\n（所属度表示）",
-      "cluster_description": "※色の濃さはクラスターへの所属度を表します\n※クラスター特性は分析結果ファイルを参照",
-      "cluster_membership_description": "※クラスターへの所属度を数値で表示\n※クラスター特性は分析結果ファイルを参照",
-      "xlabel_pca": "第1主成分",
-      "ylabel_pca": "第2主成分",
-      "cluster_center_label": "クラスター中心",
-      "silhouette_xlabel": "クラスター数",
-      "silhouette_ylabel": "シルエットスコア",
-      "cluster_center_label_gradient": "クラスター中心（1, 2）",
-      "cluster_center_label_membership": "クラスター中心",
-      "loading_data": "理由文長データを読み込んでいます...",
-      "running_correlation": "相関分析を実行中...",
-      "calculating_clusters": "最適なクラスター数を計算中...",
-      "optimal_clusters": "最適なクラスター数: {n_clusters}",
-      "running_fcm": "Fuzzy C-Means クラスタリングを実行中...",
-      "visualizing_results": "結果を可視化中...",
-      "generating_gradient": "- グラデーション表現の生成...",
-      "generating_membership": "- 所属度表示の生成...",
-      "analyzing_characteristics": "クラスター特性を分析中...",
-      "cluster_characteristics_header": "\nクラスター特性:",
-      "cluster_size": "サイズ: {size}モデル",
-      "mean_char_count": "平均文字数:",
-      "analysis_complete": "\n分析が完了しました。",
-      "results_saved_to": "結果は '{output_dir}' ディレクトリに保存されました。",
-      "generated_files_header": "\n生成されたファイル:",
-      "correlation_analysis_header": "\n1. 相関分析:",
-      "cluster_analysis_header": "\n2. クラスター分析:",
-      "fcm_analysis_header": "\n3. FCM 分析結果:",
-      "reason_dimensions_header": "理由文の種類の定義"
-    },
-    "en": {
-      "correlation_title": "Correlation of Reason Text Length between Models",
-      "silhouette_title": "Optimization of Number of Clusters",
-      "fcm_gradient_title": "Fuzzy C-Means Clustering Results\n(Based on Reason Text Length Patterns)",
-      "fcm_membership_title": "Fuzzy C-Means Clustering Results\n(with Membership Values)",
-      "cluster_description": "※Color intensity represents cluster membership degree\n※See analysis results file for cluster characteristics",
-      "cluster_membership_description": "※Membership values are shown numerically\n※See analysis results file for cluster characteristics",
-      "xlabel_pca": "First Principal Component",
-      "ylabel_pca": "Second Principal Component",
-      "cluster_center_label": "Cluster Centers",
-      "silhouette_xlabel": "Number of Clusters",
-      "silhouette_ylabel": "Silhouette Score",
-      "cluster_center_label_gradient": "Cluster Centers (1, 2)",
-      "cluster_center_label_membership": "Cluster Centers",
-      "loading_data": "Loading reason text length data...",
-      "running_correlation": "Running correlation analysis...",
-      "calculating_clusters": "Calculating optimal number of clusters...",
-      "optimal_clusters": "Optimal number of clusters: {n_clusters}",
-      "running_fcm": "Performing Fuzzy C-Means clustering...",
-      "visualizing_results": "Visualizing results...",
-      "generating_gradient": "- Generating gradient representation...",
-      "generating_membership": "- Generating membership display...",
-      "analyzing_characteristics": "Analyzing cluster characteristics...",
-      "cluster_characteristics_header": "\nCluster Characteristics:",
-      "cluster_size": "Size: {size} models",
-      "mean_char_count": "Mean character count:",
-      "analysis_complete": "\nAnalysis complete.",
-      "results_saved_to": "Results saved to '{output_dir}' directory.",
-      "generated_files_header": "\nGenerated Files:",
-      "correlation_analysis_header": "\n1. Correlation Analysis:",
-      "cluster_analysis_header": "\n2. Cluster Analysis:",
-      "fcm_analysis_header": "\n3. FCM Analysis Results:",
-      "reason_dimensions_header": "Definition of Reason Dimensions"
-    }
-  },
-  "persona_emotion_similarity": {
-    "ja": {
-      "correlation_title": "ペルソナ間の感情評価相関",
-      "pattern_title": "ペルソナごとの感情パターン",
-      "legend_title": "ペルソナ"
-    },
-    "en": {
-      "correlation_title": "Correlation of Emotional Evaluations between Personas",
-      "pattern_title": "Emotional Patterns by Persona",
-      "legend_title": "Persona"
-    }
-  },
-  "persona_reason_similarity": {
-    "ja": {
-      "correlation_title": "ペルソナ間の理由文長相関",
-      "pattern_title": "ペルソナごとの理由文長パターン",
-      "legend_title": "ペルソナ"
-    },
-    "en": {
-      "correlation_title": "Correlation of Reason Text Length between Personas",
-      "pattern_title": "Reason Text Length Patterns by Persona",
-      "legend_title": "Persona"
-    }
-  },
-  "text_emotion_similarity": {
-    "ja": {
-      "correlation_title": "文学作品間の感情評価相関",
-      "pattern_title": "文学作品ごとの感情パターン",
-      "legend_title": "文学作品"
-    },
-    "en": {
-      "correlation_title": "Correlation of Emotional Evaluations between Literary Works",
-      "pattern_title": "Emotional Patterns by Literary Work",
-      "legend_title": "Literary Work"
-    }
-  },
-  "text_reason_similarity": {
-    "ja": {
-      "correlation_title": "文学作品間の理由文長相関",
-      "pattern_title": "文学作品ごとの理由文長パターン",
-      "legend_title": "文学作品"
-    },
-    "en": {
-      "correlation_title": "Correlation of Reason Text Length between Literary Works",
-      "pattern_title": "Reason Text Length Patterns by Literary Work",
-      "legend_title": "Literary Work"
     }
   }
 }
