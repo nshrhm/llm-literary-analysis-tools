@@ -184,12 +184,7 @@ VENDOR_PATTERNS = {
 }
 
 # ペルソナの色定義
-PERSONA_COLORS = {
-    'p1': '#4285F4',  # 大学1年生：明るく若々しい青
-    'p2': '#34A853',  # 文学研究者：知性を表す緑
-    'p3': '#EA4335',  # 感情豊かな詩人：情熱的な赤
-    'p4': '#9E9E9E'   # 無感情なロボット：機械的なグレー
-}
+PERSONA_COLORS = get_message('common.persona_colors')
 
 # モデル開発元の色の定義
 VENDOR_COLORS = {

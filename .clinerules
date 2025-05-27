@@ -47,10 +47,11 @@ timestamp,text,developer,model,persona,temperature,trial,Q1value,Q2value,Q3value
   - make_result_en.sh: 全プログラムを実行する（英語画像ファイル生成）
 
 ## 視覚化プログラムの原則
-- **日本語フォント対応**:
-  - Pythonで視覚化プログラムを作成する際は、日本語フォント対応のために必ず `import japanize_matplotlib` を使用する。
-  - このライブラリを使用することで、matplotlibでの日本語表示が適切に行われる。
-  - 必要に応じて、ライブラリのインストール手順を明記する（例：`pip install japanize-matplotlib`）。
+- **`japanize_matplotlib` の条件付き利用**:
+  - スクリプトが生成するグラフに日本語テキストが含まれる場合（例: コマンドラインオプション `--lang ja` が指定された時など）に限り、`japanize_matplotlib` をインポートしてください。
+  - 英語テキストのみのグラフを生成する場合は、`japanize_matplotlib` をインポートしないでください。これにより、不要なフォント設定の変更や潜在的な問題を避けることができます。
+  - 条件付きインポートは、スクリプトのメイン処理部分（例: `main`関数内）で、言語設定を評価した後に行うことを推奨します。
+  - （補足）`japanize_matplotlib` を利用する場合、必要に応じてインストール手順（例：`pip install japanize-matplotlib`）をドキュメント等に明記してください。
 - **X軸の順序**:
   - 視覚化プログラムで文学作品をX軸にプロットする際は、'src/config.py' に基づいて '懐中時計', 'お金とピストル', 'ぼろぼろな駝鳥' の順に設定する。
 - **バイオリンプロットの視認性**:
@@ -59,6 +60,9 @@ timestamp,text,developer,model,persona,temperature,trial,Q1value,Q2value,Q3value
   - グラフ画像内のテキストは、`src/messages.json`から言語別に取得する。
   - コマンドラインオプション `--lang` を使用して、日本語（`ja`）または英語（`en`）のテキストを切り替える。
   - 生成されたグラフ画像は、言語に応じて `results/figures/ja` または `results/figures/en` に保存する。
+- **ペルソナの色定義**:
+  - グラフで使用するペルソナの色は、`src/messages.json` の `common.persona_colors` で定義する。
+  - プログラムからは `src/config.py` の `PERSONA_COLORS` 定数（内部で `get_message` 関数により `messages.json` から読み込まれる）を通じて利用する。これにより、色設定の一元管理と多言語対応の容易性を確保する。
 
 ## 補足
 - 本ファイルはプロジェクトの学習ジャーナルとして、Clineがプログラム開発を効果的に進めるための知見を記録するものです。プロジェクトの進捗やユーザーのフィードバックに応じて随時更新されます。
@@ -71,3 +75,8 @@ timestamp,text,developer,model,persona,temperature,trial,Q1value,Q2value,Q3value
 - 国際学術誌への論文投稿のため、英語記載のグラフ画像生成機能の追加。メッセージファイルを準備し、言語別実行時コマンドラインオプションを指定して、出力する英語画像と日本語画像を切り分ける機能を追加する。
 - プログラムの共通化を進めるため、`src/config.py`に共通コードをまとめる作業を実施中。
 - `src/messages.json`と`src/config.py`間の設定の重複を解消し、共通設定を`messages.json`に一元化する。
+
+## Pythonライブラリ利用時の注意点
+- **Pandas `map()` 関数の利用**:
+  - `pandas.Series.map()` 関数にマッピング辞書を渡す際、辞書の値がさらに辞書型（ネストした辞書）になっていないことを確認してください。`map` 関数はキーと値がハッシュ可能な型（例：文字列、数値）であるフラットな辞書を期待します。
+  - 多言語対応のメッセージファイル等からマッピング情報を取得する場合、実行時の言語設定に基づいて適切な文字列値を抽出し、フラットな辞書を `map` 関数に渡すようにしてください。

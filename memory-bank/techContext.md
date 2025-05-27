@@ -1,6 +1,6 @@
 ## Statistical Analysis Tools and Methods
 - Using Python data science libraries:
-  - pandas: Data manipulation and CSV I/O
+  - pandas: Data manipulation and CSV I/O. (Note: When using `Series.map()` with a dictionary, ensure the dictionary values are hashable types, not nested dictionaries, to avoid `TypeError`.)
   - numpy: Core numerical operations
   - scipy.stats: Advanced statistical calculations (skewness, kurtosis)
   
@@ -18,14 +18,14 @@
 - Using Python visualization libraries:
   - matplotlib: Core plotting functionality
   - seaborn: Enhanced statistical visualizations
-  - japanize_matplotlib: Japanese font support for proper rendering of text in graphs
+  - japanize_matplotlib: Used for Japanese font support. Imported conditionally only when `lang='ja'` to avoid unnecessary font setting changes in English-only graphs.
 - Visualization principles:
   - Consistent styling defined in src/config.py (e.g., figure sizes, DPI, color schemes)
   - Vendor-specific color coding using VENDOR_COLORS from config.py
   - Specific ordering of literary works on X-axis as defined in config.py ('懐中時計', 'お金とピストル', 'ぼろぼろな駝鳥')
   - Violin plot styling with transparent fill and emphasized outlines (fill=False, linewidth=2.0)
   - Persona-based emotion dimension coloring: Graphs now use persona's base color with varying lightness for different emotion dimensions, achieved via `get_emotion_color_from_persona_base` in `src/config.py`.
-  - `src/persona_model_emotion.py` uses bar plots to display persona-specific emotion scores for each model, facilitating direct comparison across models for each emotion and persona.
+  - `src/persona_model_emotion.py` uses bar plots to display persona-specific emotion scores for each model, facilitating direct comparison across models for each emotion and persona. Bar colors are now set according to `PERSONA_COLORS` defined in `config.py`.
 
 ## Future Development Plans
 - Language switching functionality:

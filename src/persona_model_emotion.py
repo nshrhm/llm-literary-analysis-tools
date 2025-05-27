@@ -10,9 +10,10 @@ import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import japanize_matplotlib
+# import japanize_matplotlib # langに応じてmain関数内でインポート
 from config import (
     MODEL_ORDER,
+    PERSONA_COLORS,  # PERSONA_COLORS をインポート
     VISUALIZATION_CONFIG,
     get_message,
     save_figure,
@@ -35,7 +36,9 @@ def load_data(lang='ja'):
         if lang == 'en':
             persona_mapping = get_message('persona_model_emotion.en.persona')
         else:
-            persona_mapping = get_message('common.persona_mapping')
+            raw_persona_mapping = get_message('common.persona_mapping')
+            # lang に基づいて適切な文字列を抽出
+            persona_mapping = {key: value.get(lang, value.get('ja')) for key, value in raw_persona_mapping.items()}
         
         # ペルソナを定義順に並び替え
         df['persona'] = pd.Categorical(df['persona'], categories=PERSONA_ORDER, ordered=True)
@@ -59,7 +62,7 @@ def create_emotion_plot(data, emotion_col, lang='ja'):
         言語設定（'ja'または'en'）
     """
     # グラフサイズを横長に設定
-    plt.figure(figsize=(40, 10))  # 横幅を40インチに拡大
+    plt.figure(figsize=(50, 10))  # 横幅を50インチに拡大
 
     # データの集計
     pivot_data = data.pivot_table(
@@ -71,9 +74,13 @@ def create_emotion_plot(data, emotion_col, lang='ja'):
     ).reindex(MODEL_ORDER)
 
     # 棒グラフの作成
+    # PERSONA_ORDER に基づいて色のリストを作成
+    colors = [PERSONA_COLORS[p] for p in PERSONA_ORDER if p in PERSONA_COLORS]
+
     ax = pivot_data.plot(
         kind='bar',
-        width=0.8
+        width=0.8,
+        color=colors  # 色を指定
     )
     
     # モデル間の距離を調整
@@ -117,6 +124,8 @@ def create_emotion_plot(data, emotion_col, lang='ja'):
 
 def main(lang='ja'):
     """メイン関数"""
+    if lang == 'ja':
+        import japanize_matplotlib  # 日本語の場合のみインポート
     # データの読み込み
     df = load_data(lang)
     

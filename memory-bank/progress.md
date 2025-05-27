@@ -17,7 +17,11 @@
 - 日本語グラフを 'results/figures/ja' に、英語グラフを 'results/figures/en' に保存する機能を追加。
 - `src/messages.json`と`src/config.py`間の設定の重複を解消し、共通設定を`messages.json`に一元化する作業が完了。
 - `src/persona_emotion_visualize.py` のエラーと警告を修正し、グラフの色設定をペルソナの基調色ベースの明度グラデーションに変更。凡例がグラフと重ならないように、凡例を図の右側に配置し、図の横幅を拡大、右側に余白を追加。
-- `src/persona_model_emotion.py` を新規作成し、ペルソナと感情次元の関係をモデルごとに分析・可視化する機能を追加。
+- `src/persona_model_emotion.py` を修正し、以下の点を改善:
+  - `load_data` 関数における `TypeError: unhashable type: 'dict'` エラーを修正。
+  - グラフ描画時に `PERSONA_COLORS` を使用してペルソナごとの色を適用。
+  - `lang='ja'` の場合にのみ `japanize_matplotlib` をインポートするように変更。
+- `.clinerules` を更新し、Pandas `map()` 関数の注意点と `japanize_matplotlib` の条件付き利用に関するルールを追加。
 
 ## What's Left to Build
 - `src/persona_emotion_visualize.py` のレイアウト再調整（凡例とグラフの間のスペース、図の横幅）。
@@ -38,7 +42,7 @@
 - 主要なスクリプトへの言語切り替え機能の実装が完了し、similarity系スクリプトへの実装を開始予定。
 - messages.jsonにすべての必要なメッセージを追加し、言語切り替えの基盤を整備完了。
 - `src/persona_emotion_visualize.py` の視覚的改善とバグ修正が完了。レイアウト調整中。
-- `src/persona_model_emotion.py` の動作確認と、必要に応じた調整。
+- `src/persona_model_emotion.py` のエラー修正、機能改善（ペルソナカラー適用、`japanize_matplotlib` の条件付きインポート）が完了し、動作確認済み。
 
 ## Known Issues
 - `src/persona_emotion_visualize.py` で、凡例を図の右側に配置した際に、グラフ本体と凡例の間に不必要なスペースが生じ、図の横幅が広すぎるとのフィードバックあり。
@@ -53,3 +57,5 @@
 - コマンドラインオプション --lang による言語切り替え方式を標準化し、すべてのスクリプトで統一的に実装する方針を採用。
 - ペルソナ関連のグラフでは、ペルソナの基調色を維持しつつ、感情次元を明度で区別する方針を採用。
 - グラフのレイアウト（特に凡例の位置や図全体のサイズ）は、視認性とスペース効率のバランスを考慮して調整する必要がある。
+- Pandas `map()` 関数に渡す辞書は、値がネストした辞書にならないように注意する方針を明確化。
+- `japanize_matplotlib` は、日本語表示が必要なスクリプト実行時（`lang='ja'`など）に限定してインポートする方針を明確化。

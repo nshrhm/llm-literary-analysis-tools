@@ -1,17 +1,25 @@
 # Active Context
 
 ## Current Work Focus
-- `src/persona_model_emotion.py` の新規作成とMemory Bankへの記録。
+- `src/persona_model_emotion.py` のエラー修正（`TypeError`）、ペルソナカラーの適用、`japanize_matplotlib` の条件付きインポートへの変更。および、これらの変更に伴う `.clinerules` とメモリバンクの更新。
 - `src/persona_emotion_visualize.py` のレイアウト調整（凡例とグラフの間のスペース調整、横幅調整）。
 - `src/messages.json`と`src/config.py`間の設定の重複解消と一元化が完了。
+- ペルソナの色定義を`src/messages.json`に一元化し、`src/config.py`から参照するように変更。この方針を`.clinerules`に追記。
 
 ## Recent Changes
-- `src/persona_model_emotion.py` を新規作成: ペルソナと感情次元の関係をモデルごとに分析・可視化するスクリプト。
+- `src/persona_model_emotion.py` を修正:
+  - `load_data` 関数における `TypeError: unhashable type: 'dict'` エラーを修正（`common.persona_mapping` からの言語別文字列抽出を実装）。
+  - グラフ描画時に `PERSONA_COLORS` を使用してペルソナごとの色を適用。
+  - `lang='ja'` の場合にのみ `japanize_matplotlib` をインポートするように変更。
 - `src/persona_emotion_visualize.py` を修正:
   - `TypeError: unhashable type: 'dict'` エラーを解決。
   - Seabornの `FutureWarning` を解消。
   - グラフの色設定を、ペルソナの基調色をベースにした感情次元の明度グラデーションに変更。
   - 凡例がグラフと重ならないように、凡例を図の右側に配置し、図の横幅を拡大（(14, 8)）、右側に余白を追加。
+- ペルソナの色定義を`src/messages.json`に移動し、`src/config.py`がそこから読み込むように変更。
+- `.clinerules` を更新:
+  - 「視覚化プログラムの原則」に `japanize_matplotlib` の条件付き利用に関するルールを追記。
+  - 「Pythonライブラリ利用時の注意点」セクションを新設し、Pandas `map()` 関数のネストした辞書に関する注意点を記載。
 - 以前の変更点:
   - 以下の視覚化スクリプトに言語切り替え機能を実装完了:
     - model_emotion_visualize.py
@@ -61,3 +69,5 @@
 - 言語切り替え機能の追加が、国際的な論文投稿において重要な要素であると理解し、主要な視覚化スクリプトに実装完了。
 - 共通関数の使用により、コードの重複が減り、スクリプトの保守性が向上したことを実感。
 - グラフのレイアウト調整（特に凡例の位置と図のサイズ）は、試行錯誤が必要な場合があることを学習。
+- Pandas `Series.map()` でネストした辞書を使用すると `TypeError` が発生する可能性があるため、フラットな辞書を渡す必要があることを再確認。
+- `japanize_matplotlib` は日本語表示が必要な場合に限定してインポートすることで、他言語環境への意図しない影響を避けられることを学習。
