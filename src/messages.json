@@ -8,7 +8,10 @@
       "bar_plot_title": "ペルソナごとの感情次元評価",
       "distribution_plot_title": "ペルソナごとの感情分布",
       "emotion_xlabel": "ペルソナ",
-      "emotion_ylabel": "感情値"
+      "emotion_ylabel": "感情値",
+      "pattern_title": "ペルソナごとの感情パターン",
+      "correlation_title": "ペルソナ間の感情評価相関",
+      "legend_title": "ペルソナ"
     },
     "en": {
       "header_text": "Average Emotional Dimension Values by Persona",
@@ -18,7 +21,10 @@
       "bar_plot_title": "Emotional Dimension Evaluation by Persona",
       "distribution_plot_title": "Emotion Distribution by Persona",
       "emotion_xlabel": "Persona",
-      "emotion_ylabel": "Emotion Value"
+      "emotion_ylabel": "Emotion Value",
+      "pattern_title": "Emotion Patterns by Persona",
+      "correlation_title": "Correlation of Emotional Evaluations between Personas",
+      "legend_title": "Persona"
     }
   },
   "persona_model_emotion": {
@@ -79,15 +85,63 @@
       }
     },
     "persona_mapping": {
-      "p1": "大学1年生",
-      "p2": "文学研究者",
-      "p3": "感情豊かな詩人",
-      "p4": "無感情なロボット"
+      "p1": {
+        "ja": "大学1年生",
+        "en": "First-year Student"
+      },
+      "p2": {
+        "ja": "文学研究者",
+        "en": "Literature Scholar"
+      },
+      "p3": {
+        "ja": "感情豊かな詩人",
+        "en": "Emotional Poet"
+      },
+      "p4": {
+        "ja": "無感情なロボット",
+        "en": "Emotionless Robot"
+      }
     },
     "text_mapping": {
       "t1": "懐中時計",
       "t2": "お金とピストル",
       "t3": "ぼろぼろな駝鳥"
+    }
+  },
+  "persona_emotion_analysis": {
+    "ja": {
+      "header_text": "ペルソナごとの感情パターン分析:",
+      "dominant_text": "主要な感情",
+      "min_text": "最も弱い感情",
+      "mean_text": "平均感情値",
+      "std_text": "感情値の標準偏差",
+      "profile_text": "感情プロファイル",
+      "loading_text": "感情評価データを読み込んでいます...",
+      "correlation_text": "相関分析を実行中...",
+      "pattern_text": "感情パターンを分析中...",
+      "visualization_text": "感情パターンを可視化中...",
+      "completion_text": "分析が完了しました。",
+      "save_text": "結果は '{}' ディレクトリに保存されました。",
+      "generated_files": "生成されたファイル:",
+      "correlation_files": "1. 相関分析:",
+      "pattern_files": "2. 感情パターン分析:"
+    },
+    "en": {
+      "header_text": "Persona Emotion Pattern Analysis:",
+      "dominant_text": "Dominant Emotion",
+      "min_text": "Weakest Emotion",
+      "mean_text": "Mean Value",
+      "std_text": "Standard Deviation",
+      "profile_text": "Emotion Profile",
+      "loading_text": "Loading emotional evaluation data...",
+      "correlation_text": "Running correlation analysis...",
+      "pattern_text": "Analyzing emotion patterns...",
+      "visualization_text": "Visualizing emotion patterns...",
+      "completion_text": "Analysis complete.",
+      "save_text": "Results have been saved to the '{}' directory.",
+      "generated_files": "Generated Files:",
+      "correlation_files": "1. Correlation Analysis:",
+      "pattern_files": "2. Emotion Pattern Analysis:"
     }
   },
   "model_emotion_similarity": {

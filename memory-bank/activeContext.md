@@ -2,7 +2,7 @@
 
 ## Current Work Focus
 - `src/persona_model_emotion.py` の新規作成とMemory Bankへの記録。
-- `src/persona_emotion_visualize.py` のエラー修正と警告対応、およびグラフの視覚的改善が完了。
+- `src/persona_emotion_visualize.py` のレイアウト調整（凡例とグラフの間のスペース調整、横幅調整）。
 - `src/messages.json`と`src/config.py`間の設定の重複解消と一元化が完了。
 
 ## Recent Changes
@@ -11,9 +11,7 @@
   - `TypeError: unhashable type: 'dict'` エラーを解決。
   - Seabornの `FutureWarning` を解消。
   - グラフの色設定を、ペルソナの基調色をベースにした感情次元の明度グラデーションに変更。
-- `src/config.py` を修正:
-  - `EMOTION_COLORS` を削除。
-  - ペルソナの基調色と感情次元のインデックスから色を動的に生成する `get_emotion_color_from_persona_base` 関数を追加。
+  - 凡例がグラフと重ならないように、凡例を図の右側に配置し、図の横幅を拡大（(14, 8)）、右側に余白を追加。
 - 以前の変更点:
   - 以下の視覚化スクリプトに言語切り替え機能を実装完了:
     - model_emotion_visualize.py
@@ -29,6 +27,7 @@
   - `src/config.py`から重複する読み込み関数を削除し、`get_message`共通関数を導入。
 
 ## Next Steps
+- `src/persona_emotion_visualize.py` のレイアウト再調整（凡例とグラフの間のスペース、図の横幅）。
 - similarity系の視覚化スクリプトに言語切り替え機能を実装:
   1. model_emotion_similarity.py
   2. model_reason_similarity.py
@@ -61,3 +60,4 @@
 - 開発元ごとの色統一が、視覚的な一貫性を保ち、論文でのプレゼンテーションを強化することを認識。
 - 言語切り替え機能の追加が、国際的な論文投稿において重要な要素であると理解し、主要な視覚化スクリプトに実装完了。
 - 共通関数の使用により、コードの重複が減り、スクリプトの保守性が向上したことを実感。
+- グラフのレイアウト調整（特に凡例の位置と図のサイズ）は、試行錯誤が必要な場合があることを学習。

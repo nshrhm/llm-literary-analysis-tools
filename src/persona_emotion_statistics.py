@@ -20,7 +20,7 @@ def calculate_statistics(data):
 
 def main():
     # 入力データを読み込む
-    input_path = f"{OUTPUT_DIR}/persona_emotion_average.csv"
+    input_path = f"{OUTPUT_DIR}/persona_emotion.csv"
     df = pd.read_csv(input_path)
     
     # ペルソナと感情次元のカラムを取得
@@ -58,7 +58,7 @@ def main():
     print(combined_stats)
     
     # 感情次元の日本語名での結果も表示
-    jp_cols = {col: emotion_names_ja[col] for col in metric_cols}
+    jp_cols = {col: get_message(f'common.emotion_dimensions.{col}.ja') for col in metric_cols}
     stats_df_jp = combined_stats.rename(columns=jp_cols)
     print("\n感情次元の統計情報（日本語）:")
     print(stats_df_jp)

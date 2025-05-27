@@ -16,10 +16,11 @@
 - プログラムの共通化を進め、src/config.pyに視覚化の共通関数を追加し、スクリプトの保守性を向上。
 - 日本語グラフを 'results/figures/ja' に、英語グラフを 'results/figures/en' に保存する機能を追加。
 - `src/messages.json`と`src/config.py`間の設定の重複を解消し、共通設定を`messages.json`に一元化する作業が完了。
-- `src/persona_emotion_visualize.py` のエラーと警告を修正し、グラフの色設定をペルソナの基調色ベースの明度グラデーションに変更。
+- `src/persona_emotion_visualize.py` のエラーと警告を修正し、グラフの色設定をペルソナの基調色ベースの明度グラデーションに変更。凡例がグラフと重ならないように、凡例を図の右側に配置し、図の横幅を拡大、右側に余白を追加。
 - `src/persona_model_emotion.py` を新規作成し、ペルソナと感情次元の関係をモデルごとに分析・可視化する機能を追加。
 
 ## What's Left to Build
+- `src/persona_emotion_visualize.py` のレイアウト再調整（凡例とグラフの間のスペース、図の横幅）。
 - similarity系の視覚化スクリプトへの言語切り替え機能の実装:
   1. model_emotion_similarity.py
   2. model_reason_similarity.py
@@ -36,11 +37,11 @@
 - 感情分析スクリプトの開発が一通り完了し、動作確認が済んでいる状態。
 - 主要なスクリプトへの言語切り替え機能の実装が完了し、similarity系スクリプトへの実装を開始予定。
 - messages.jsonにすべての必要なメッセージを追加し、言語切り替えの基盤を整備完了。
-- `src/persona_emotion_visualize.py` の視覚的改善とバグ修正が完了。
+- `src/persona_emotion_visualize.py` の視覚的改善とバグ修正が完了。レイアウト調整中。
 - `src/persona_model_emotion.py` の動作確認と、必要に応じた調整。
 
 ## Known Issues
-- なし（現在のところ、ユーザーのリクエストに基づく修正はすべて実施済み）。
+- `src/persona_emotion_visualize.py` で、凡例を図の右側に配置した際に、グラフ本体と凡例の間に不必要なスペースが生じ、図の横幅が広すぎるとのフィードバックあり。
 
 ## Evolution of Project Decisions
 - 初期のスクリプトではすべてのモデルとグラフを生成していたが、論文での使用を考慮し、必要なグラフのみを生成するように変更。
@@ -51,3 +52,4 @@
 - 日本語グラフを 'results/figures/ja' に、英語グラフを 'results/figures/en' に保存する方針を採用し、コードとドキュメントに反映。
 - コマンドラインオプション --lang による言語切り替え方式を標準化し、すべてのスクリプトで統一的に実装する方針を採用。
 - ペルソナ関連のグラフでは、ペルソナの基調色を維持しつつ、感情次元を明度で区別する方針を採用。
+- グラフのレイアウト（特に凡例の位置や図全体のサイズ）は、視認性とスペース効率のバランスを考慮して調整する必要がある。

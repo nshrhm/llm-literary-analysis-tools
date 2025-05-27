@@ -219,17 +219,17 @@ def get_emotion_color_from_persona_base(base_color_hex, emotion_index):
     h, l, s = colorsys.rgb_to_hls(*base_rgb)
     
     # 明度 (L) を感情次元のインデックスに応じて調整
-    # 明るい色から暗い色へ
-    if emotion_index == 0: # Interest (明るい)
-        l_adjusted = min(1.0, l + 0.15) # 明度を少し下げる
-    elif emotion_index == 1: # Surprise (やや明るい)
-        l_adjusted = min(1.0, l + 0.05) # 明度を少し上げる
-    elif emotion_index == 2: # Sadness (やや暗い)
-        l_adjusted = max(0.0, l - 0.05) # 明度を少し下げる
-    elif emotion_index == 3: # Anger (暗い)
-        l_adjusted = max(0.0, l - 0.2) # 明度を下げる
+    # すべての感情次元で暗めの色を使用
+    if emotion_index == 0: # Interest
+        l_adjusted = max(0.0, l - 0.3)
+    elif emotion_index == 1: # Surprise
+        l_adjusted = max(0.0, l - 0.35)
+    elif emotion_index == 2: # Sadness
+        l_adjusted = max(0.0, l - 0.4)
+    elif emotion_index == 3: # Anger
+        l_adjusted = max(0.0, l - 0.45)
     else:
-        l_adjusted = l # デフォルト
+        l_adjusted = max(0.0, l - 0.3) # デフォルト
         
     # HLSをRGBに変換し、16進数カラーコードに戻す
     r, g, b = colorsys.hls_to_rgb(h, l_adjusted, s)

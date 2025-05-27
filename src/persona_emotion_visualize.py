@@ -37,7 +37,7 @@ def load_messages(lang):
 def create_bar_plot(data, personas, lang='ja'):
     """棒グラフによる感情次元の平均値比較を作成"""
     messages = load_messages(lang) # messagesは他の場所で使用されているため残す
-    fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
+    fig = plt.figure(figsize=(12.5, 8))  # 横幅を調整
     gs = fig.add_gridspec(1, 1)
     ax = fig.add_subplot(gs[0])
 
@@ -46,15 +46,16 @@ def create_bar_plot(data, personas, lang='ja'):
     ax.text(0.5, 1.05, header_text,
             horizontalalignment='center',
             transform=ax.transAxes,
-            bbox=dict(facecolor='white', alpha=0.8, edgecolor='none'))
+            bbox=dict(facecolor='white', alpha=0.8, edgecolor='none'),
+            fontsize=20)  # ヘッダーテキストも大きく
 
     # 各ペルソナのデータをプロット
     bar_width = 0.2
     x = range(len(personas))
     
-    # 言語に応じた感情次元の定義を使用
-    # load_messagesから取得したmessages['emotion_dimensions']を使用
+    # 言語に応じた感情次元の定義を確実に使用
     emotions_for_bar_plot = messages['emotion_dimensions']
+    # print(f"Debug - Emotion dimensions for {lang}:", emotions_for_bar_plot)  # デバッグ出力を追加
 
     # 各感情次元のデータをプロット
     emotion_labels = []  # 凡例用のラベル
@@ -74,25 +75,29 @@ def create_bar_plot(data, personas, lang='ja'):
             # 値のラベルを表示
             height = value
             ax.text(i + j * bar_width + bar_width/2, height,
-                   f'{height:.1f}', ha='center', va='bottom')
+                   f'{height:.1f}', ha='center', va='bottom',
+                   fontsize=14)  # バー上の数値も大きく
         
         # 感情次元ごとに最初のバーのみを凡例用に保存
         emotion_bars.append(emotion_bars_group[0])
         emotion_labels.append(label)
 
     # グラフの設定
-    ax.set_xlabel(messages['xlabel'])
-    ax.set_ylabel(messages['ylabel'])
-    ax.set_title(messages['bar_plot_title'])
+    ax.set_xlabel(messages['xlabel'], fontsize=20)
+    ax.set_ylabel(messages['ylabel'], fontsize=20)
     ax.set_xticks([p + 1.5 * bar_width for p in x])
-    ax.set_xticklabels(personas)
+    ax.set_xticklabels(personas, fontsize=16)
     ax.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
     
     # 凡例を手動で作成
-    ax.legend(emotion_bars, emotion_labels, title=messages['emotion_legend_title'])
+    ax.legend(emotion_bars, emotion_labels, 
+             title=messages['emotion_legend_title'],
+             fontsize=20,
+             title_fontsize=24,
+             bbox_to_anchor=(1.18, 1.0))  # 凡例の位置を調整
 
     # レイアウトの調整
-    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.15, left=0.15, right=0.9)  # 右側の余白を減らす
     save_figure(plt, "persona_emotion", lang=lang)
     plt.close()
 
@@ -100,7 +105,9 @@ def create_distribution_plot(data, personas, lang='ja'):
     """バイオリンプロットとスウォームプロットによる分布の可視化 (ファセットグリッド使用)"""
     messages = load_messages(lang)
     
+    # 言語に応じた感情次元の定義を確実に使用
     emotions_dict = messages['emotion_dimensions']
+    # print(f"Debug - Distribution emotion dimensions for {lang}:", emotions_dict)  # デバッグ出力を追加
     value_vars = list(emotions_dict.keys())
     
     melted_data = create_melted_data(data, 
@@ -127,54 +134,40 @@ def create_distribution_plot(data, personas, lang='ja'):
     g = sns.FacetGrid(melted_data, col='persona_display', col_order=personas, col_wrap=2, height=6, aspect=1.2)
 
     # 各サブプロットにバイオリンプロットとスウォームプロットをマッピング
-    def plot_persona_emotion(data, **kwargs): # data_subsetをdataに変更
-        persona_id = data['persona'].iloc[0] # サブセットからペルソナIDを取得
+    def plot_persona_emotion(data, **kwargs):
+        persona_id = data['persona'].iloc[0]
         base_color_hex = PERSONA_COLORS[persona_id]
         
-        # 感情次元の明度グラデーションパレットを動的に生成
-        emotion_palette = [get_emotion_color_from_persona_base(base_color_hex, i) for i in range(len(value_vars))]
+        # すべての感情次元に対して最も暗い色を使用
+        emotion_palette = [get_emotion_color_from_persona_base(base_color_hex, 0) for _ in range(len(value_vars))]
         
-        ax = plt.gca() # 現在のサブプロットのAxesを取得
+        ax = plt.gca()
         
-        sns.violinplot(data=data, x='emotion', y='value', hue='emotion', # hue='emotion' を再度追加
-                       ax=ax, inner=None, fill=False, linewidth=2.0,
-                       palette=emotion_palette,
-                       order=emotion_order, legend=False, dodge=False) # dodge=False を追加
-
-        sns.swarmplot(data=data, x='emotion', y='value', hue='emotion', # hue='emotion' を再度追加
-                      ax=ax, dodge=False, size=3, alpha=0.4, # dodge=False に変更
+        sns.violinplot(data=data, x='emotion', y='value', hue='emotion',
+                      ax=ax, inner=None, fill=False, linewidth=2.0,
                       palette=emotion_palette,
-                      order=emotion_order, legend=False)
+                      order=emotion_order, legend=False, dodge=False)
+
+        sns.swarmplot(data=data, x='emotion', y='value', hue='emotion',
+                     ax=ax, dodge=False, size=3, alpha=0.4,
+                     palette=emotion_palette,
+                     order=emotion_order, legend=False)
         
-        ax.set_xlabel(messages['emotion_xlabel'])
-        ax.set_ylabel(messages['emotion_ylabel'])
+        ax.set_xlabel(messages['emotion_xlabel'], fontsize=14)
+        ax.set_ylabel(messages['emotion_ylabel'], fontsize=14)
         ax.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
         
-        # 凡例はFacetGridの外部で一括して作成するため、ここでは設定しない
         ax.get_legend().remove() if ax.get_legend() else None
 
     g.map_dataframe(plot_persona_emotion)
 
     # 各サブプロットのタイトルを設定
-    g.set_titles(col_template="{col_name}")
+    g.set_titles(col_template="{col_name}", size=12)
 
     # 全体のタイトルを設定
-    g.fig.suptitle(messages['distribution_plot_title'], y=1.02) # yを調整してタイトルが重ならないようにする
+    g.fig.suptitle(messages['distribution_plot_title'], y=1.02, fontsize=16)
 
-    # 共通の凡例を作成
-    # 凡例用のダミープロットを作成
-    handles = []
-    labels = []
-    for i, emotion_label in enumerate(emotion_order):
-        # 任意のペルソナの基調色（例: p1）を使って凡例の色を生成
-        dummy_color = get_emotion_color_from_persona_base(PERSONA_COLORS['p1'], i)
-        handles.append(plt.Rectangle((0,0),1,1, color=dummy_color))
-        labels.append(emotion_label)
-    
-    g.fig.legend(handles, labels, title=messages['emotion_legend_title'], 
-                 bbox_to_anchor=(1.02, 0.95), loc='upper left', borderaxespad=0.)
-
-    plt.tight_layout(rect=[0, 0, 1, 0.98]) # タイトルと凡例のためにレイアウトを調整
+    plt.tight_layout()
     save_figure(plt, "persona_emotion_distribution", lang=lang)
     plt.close()
 
@@ -192,9 +185,9 @@ def main(lang='ja'):
     # ペルソナの順序を定義（言語に応じて）
     personas = list(messages['persona_mapping'].values())
 
-    # 2つのグラフを生成
+    # バープロットのみ生成
     create_bar_plot(df, personas, lang)
-    create_distribution_plot(df, personas, lang)
+    # create_distribution_plot(df, personas, lang)  # 一時的にコメントアウト
 
     # ペルソナごとの平均値を表示
     print("\nペルソナごとの感情次元平均値:")
