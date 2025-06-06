@@ -19,7 +19,7 @@
 - **統計分析コンポーネント**: `*_statistics.py`スクリプトが要約統計量を計算し、結果をCSVファイルに保存します。
 - **視覚化コンポーネント**: 
   - `*_visualize.py`スクリプトが分析結果のCSVファイルを基にグラフを生成し、PNGおよびSVG形式で保存します。
-  - `src/persona_model_emotion.py` のような特定の視点に特化した視覚化スクリプトは、`data_all.csv` を直接読み込み、モデルごと、ペルソナごと、感情次元ごとの評価値を棒グラフで表示します。
+  - `src/persona_model_emotion.py` は、`data_all.csv` を直接読み込み、モデルごと、ペルソナごとの各感情次元（Q1-Q4）の評価値を、1つの結合された棒グラフ画像（例: `persona_model_emotion_combined.png`）として表示します。この結合グラフでは、4つの感情次元のグラフが縦に並べられ、凡例とX軸が共通化されています。
 - これらのコンポーネントは独立して動作し、CSVファイルを介してデータをやり取りします。
 
 ## Critical Implementation Paths

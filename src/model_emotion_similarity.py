@@ -228,18 +228,18 @@ def print_generated_files(lang='ja'):
     print("\n1. 相関分析:")
     print(f"- {os.path.join(OUTPUT_DIR, 'model_emotion_correlation.csv')}")
     print(f"- {os.path.join(figures_dir, 'model_emotion_correlation.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_emotion_correlation.svg')}")
+    print(f"- {os.path.join(figures_dir, 'model_emotion_correlation.pdf')}")
     
     print("\n2. クラスター分析:")
     print(f"- {os.path.join(figures_dir, 'model_emotion_silhouette_score.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_emotion_silhouette_score.svg')}")
-    
+    print(f"- {os.path.join(figures_dir, 'model_emotion_silhouette_score.pdf')}")
+
     print("\n3. FCM分析結果:")
     print(f"- {os.path.join(OUTPUT_DIR, 'model_emotion_cluster_characteristic.json')}")
     print(f"- {os.path.join(figures_dir, 'model_emotion_fcm_gradient.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_emotion_fcm_gradient.svg')}")
+    print(f"- {os.path.join(figures_dir, 'model_emotion_fcm_gradient.pdf')}")
     print(f"- {os.path.join(figures_dir, 'model_emotion_fcm_membership.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_emotion_fcm_membership.svg')}")
+    print(f"- {os.path.join(figures_dir, 'model_emotion_fcm_membership.pdf')}")
 
 def main(lang='ja'):
     # 感情次元の定義を取得

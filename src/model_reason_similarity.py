@@ -235,18 +235,18 @@ def print_generated_files(lang='ja'):
     print(f"- {os.path.join(OUTPUT_DIR, 'model_reason_correlation.csv')}")
     figures_dir = os.path.join(OUTPUT_DIR, 'figures', lang)
     print(f"- {os.path.join(figures_dir, 'model_reason_correlation.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_reason_correlation.svg')}")
+    print(f"- {os.path.join(figures_dir, 'model_reason_correlation.pdf')}")
     
     print(messages['cluster_analysis_header'])
     print(f"- {os.path.join(figures_dir, 'model_reason_silhouette.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_reason_silhouette.svg')}")
-    
+    print(f"- {os.path.join(figures_dir, 'model_reason_silhouette.pdf')}")
+
     print(messages['fcm_analysis_header'])
     print(f"- {os.path.join(OUTPUT_DIR, 'model_reason_cluster_characteristic.json')}")
     print(f"- {os.path.join(figures_dir, 'model_reason_fcm_gradient.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_reason_fcm_gradient.svg')}")
+    print(f"- {os.path.join(figures_dir, 'model_reason_fcm_gradient.pdf')}")
     print(f"- {os.path.join(figures_dir, 'model_reason_fcm_membership.png')}")
-    print(f"- {os.path.join(figures_dir, 'model_reason_fcm_membership.svg')}")
+    print(f"- {os.path.join(figures_dir, 'model_reason_fcm_membership.pdf')}")
 
 def main(lang='ja'):
     # 日本語フォントのインポート（日本語の場合のみ）

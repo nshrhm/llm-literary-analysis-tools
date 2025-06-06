@@ -123,11 +123,11 @@ def print_generated_files(lang='ja'):
     print(f"- {os.path.join(OUTPUT_DIR, 'persona_emotion_correlation.csv')}")
     figures_dir = os.path.join(OUTPUT_DIR, 'figures', lang)
     print(f"- {os.path.join(figures_dir, 'persona_emotion_correlation.png')}")
-    print(f"- {os.path.join(figures_dir, 'persona_emotion_correlation.svg')}")
+    print(f"- {os.path.join(figures_dir, 'persona_emotion_correlation.pdf')}")
     
     print(f"\n{analysis_messages['pattern_files']}")
     print(f"- {os.path.join(figures_dir, 'persona_emotion_patterns.png')}")
-    print(f"- {os.path.join(figures_dir, 'persona_emotion_patterns.svg')}")
+    print(f"- {os.path.join(figures_dir, 'persona_emotion_patterns.pdf')}")
 
 def main(lang='ja'):
     # 言語に応じてmatplotlibの設定を行う

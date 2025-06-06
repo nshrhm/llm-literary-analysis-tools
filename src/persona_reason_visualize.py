@@ -158,9 +158,9 @@ def main(lang='ja'):
     lang_dir = 'ja' if lang == 'ja' else 'en'
     print(f"\n言語 {lang} のグラフを保存しました:")
     print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_reason.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_reason.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_reason.pdf')}")
     print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_reason_distribution.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_reason_distribution.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_reason_distribution.pdf')}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate visualization for persona reason data.')

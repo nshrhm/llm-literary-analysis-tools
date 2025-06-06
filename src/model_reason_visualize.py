@@ -271,14 +271,14 @@ def main(lang='ja'):
     lang_dir = 'ja' if lang == 'ja' else 'en'
     print(f"\n言語 {lang} のグラフを保存しました:")
     print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason.pdf')}")
     print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_distribution.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_distribution.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_distribution.pdf')}")
     print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_sorted_all.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_sorted_all.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'model_reason_sorted_all.pdf')}")
     for i in range(1, 5):
         print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, f'model_reason_sorted_q{i}.png')}")
-        print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, f'model_reason_sorted_q{i}.svg')}")
+        print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, f'model_reason_sorted_q{i}.pdf')}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate visualization for model reason data.')

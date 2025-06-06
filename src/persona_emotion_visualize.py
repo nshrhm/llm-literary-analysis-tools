@@ -203,9 +203,9 @@ def main(lang='ja'):
     lang_dir = 'ja' if lang == 'ja' else 'en'
     print(f"\n言語 {lang} のグラフを保存しました:")
     print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_emotion.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_emotion.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_emotion.pdf')}")
     print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_emotion_distribution.png')}")
-    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_emotion_distribution.svg')}")
+    print(f"- {os.path.join(OUTPUT_DIR, 'figures', lang_dir, 'persona_emotion_distribution.pdf')}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate visualization for persona emotion data.')

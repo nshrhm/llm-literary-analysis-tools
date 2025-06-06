@@ -137,11 +137,11 @@ def print_generated_files(lang='ja'):
     print(f"- {os.path.join(OUTPUT_DIR, 'text_reason_correlation.csv')}")
     figures_dir = os.path.join(OUTPUT_DIR, 'figures', lang)
     print(f"- {os.path.join(figures_dir, 'text_reason_correlation.png')}")
-    print(f"- {os.path.join(figures_dir, 'text_reason_correlation.svg')}")
+    print(f"- {os.path.join(figures_dir, 'text_reason_correlation.pdf')}")
     
     print("\n2. 理由文長パターン分析:")
     print(f"- {os.path.join(figures_dir, 'text_reason_patterns.png')}")
-    print(f"- {os.path.join(figures_dir, 'text_reason_patterns.svg')}")
+    print(f"- {os.path.join(figures_dir, 'text_reason_patterns.pdf')}")
 
 def main(lang='ja'):
     # 出力ディレクトリの作成
