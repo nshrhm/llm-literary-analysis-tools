@@ -70,7 +70,7 @@ def main():
     # メッセージの読み込み
     with open('src/messages.json', 'r', encoding='utf-8') as f:
         messages_data = json.load(f)
-    messages = messages_data[lang]['missing_values']
+    messages = messages_data['missing_values'][lang]
 
     # 出力ディレクトリの作成
     ensure_output_directories()

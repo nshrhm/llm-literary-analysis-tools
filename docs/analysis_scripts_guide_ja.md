@@ -254,7 +254,7 @@
 - **注意**: `src/persona_emotion_visualize.py` は、 `src/persona_emotion_analysis.py` を実行した後に実行することを推奨します。
 
 ### 22. `src/persona_model_emotion.py`
-- **説明**: ペルソナと感情次元の関係をモデルごとに分析・可視化します。各感情次元（Q1-Q4）について、モデルごとのペルソナの評価値を棒グラフで表示します。
+- **説明**: ペルソナと感情次元の関係をモデルごとに分析・可視化します。4つの感情次元（Q1-Q4）すべての棒グラフを縦に並べ、凡例とX軸（モデル名、最下部のみ表示）を共通化した単一の結合画像ファイルを生成します。
 - **実行方法**: プロジェクトルートディレクトリから以下のコマンドを実行します。
   ```bash
   python ./src/persona_model_emotion.py [--lang {ja,en}]
@@ -264,10 +264,8 @@
     - `ja`: 日本語
     - `en`: 英語
 - **生成されるファイル**: 
-  - `results/figures/ja/persona_model_emotion_q1.png`, `results/figures/ja/persona_model_emotion_q1.svg`
-  - `results/figures/ja/persona_model_emotion_q2.png`, `results/figures/ja/persona_model_emotion_q2.svg`
-  - `results/figures/ja/persona_model_emotion_q3.png`, `results/figures/ja/persona_model_emotion_q3.svg`
-  - `results/figures/ja/persona_model_emotion_q4.png`, `results/figures/ja/persona_model_emotion_q4.svg`
+  - `results/figures/ja/persona_model_emotion_combined.png`
+  - `results/figures/ja/persona_model_emotion_combined.svg`
   - (英語版は `results/figures/en/` に保存されます)
 - **注意**: このスクリプトは `data_all.csv` を直接読み込みます。
 

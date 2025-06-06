@@ -10,7 +10,7 @@ from config import (
     ensure_output_directories, save_figure
 )
 
-def load_messages():
+def load_messages(lang='ja'):
     """メッセージファイルを読み込む"""
     with open('src/messages.json', 'r', encoding='utf-8') as f:
         messages = json.load(f)
@@ -18,7 +18,7 @@ def load_messages():
 
 def create_overall_plot(emotion_df, emotions, messages_lang, lang='ja'):
     """感情次元のデータをtemperatureごとに視覚化（全体平均）"""
-    messages = messages_lang['temperature_emotion']
+    messages = messages_lang[lang]
     plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     for col, label in emotions.items():
         temp_means = emotion_df.groupby('temperature')[col].mean()
@@ -34,7 +34,7 @@ def create_overall_plot(emotion_df, emotions, messages_lang, lang='ja'):
 
 def create_model_plots(emotion_df, emotions, messages_lang, lang='ja'):
     """モデルごとの感情次元の変化をtemperatureで視覚化（全感情次元）"""
-    messages = messages_lang['temperature_emotion']
+    messages = messages_lang[lang]
     for col, label in emotions.items():
         plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
         for model in emotion_df['model'].unique():
@@ -52,7 +52,7 @@ def create_model_plots(emotion_df, emotions, messages_lang, lang='ja'):
 
 def create_selected_model_plots(emotion_df, stats_df, emotions, messages_lang, lang='ja'):
     """統計データを用いた可視化（エラーバー付きプロット、上位3モデルと下位3モデルに絞る）"""
-    messages = messages_lang['temperature_emotion']
+    messages = messages_lang[lang]
     for col, label in emotions.items():
         # モデルごとの平均値を計算し、上位3モデルと下位3モデルを選択
         model_means = stats_df.groupby('model')[f"{col}_mean"].mean().sort_values()
@@ -86,12 +86,37 @@ def main(lang='ja'):
     stats_df = pd.read_csv(f"{OUTPUT_DIR}/temperature_emotion_statistics.csv")
 
     # メッセージファイルを読み込む
-    all_messages = load_messages()
-    messages_lang = all_messages[lang]
+    all_messages = load_messages(lang)
+    if 'temperature_emotion' in all_messages:
+        messages_lang = all_messages['temperature_emotion']
+    else:
+        # フォールバック: 基本的なメッセージを作成
+        messages_lang = {
+            'ja': {
+                'title': '温度パラメータと感情評価の関係',
+                'xlabel': '温度',
+                'ylabel': '感情値'
+            },
+            'en': {
+                'title': 'Relationship between Temperature Parameter and Emotion Evaluation',
+                'xlabel': 'Temperature',
+                'ylabel': 'Emotion Value'
+            }
+        }
     
-    # emoitonsは各グラフ作成関数で使用する感情次元のラベル辞書
+    # emotions辞書は各グラフ作成関数で使用する感情次元のラベル辞書
     # messages.jsonのcommon.emotion_dimensionsから感情次元のラベルを取得
-    emotions = all_messages['common']['emotion_dimensions']
+    if 'common' in all_messages and 'emotion_dimensions' in all_messages['common']:
+        emotions_raw = all_messages['common']['emotion_dimensions']
+        emotions = {k: v[lang] for k, v in emotions_raw.items()}
+    else:
+        # フォールバック: デフォルトの感情次元
+        emotions = {
+            'Q1value': '面白さ' if lang == 'ja' else 'Interesting',
+            'Q2value': '驚き' if lang == 'ja' else 'Surprise',
+            'Q3value': '悲しさ' if lang == 'ja' else 'Sadness',
+            'Q4value': '怒り' if lang == 'ja' else 'Anger'
+        }
 
     # 各種グラフを生成
     create_overall_plot(emotion_df, emotions, messages_lang, lang)

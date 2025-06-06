@@ -16,7 +16,19 @@ def load_messages(lang='ja'):
     """言語に応じたメッセージと共通メッセージを読み込む"""
     with open('src/messages.json', 'r', encoding='utf-8') as f:
         messages = json.load(f)
-    return messages
+    
+    # persona_reason_similarityメッセージと共通辞書を言語固有に変換
+    combined_messages = messages['persona_reason_similarity'][lang].copy()
+    
+    # reason_dimensionsを言語固有の辞書に変換
+    reason_dimensions_raw = messages['common']['reason_dimensions']
+    combined_messages['reason_dimensions'] = {k: v[lang] for k, v in reason_dimensions_raw.items()}
+    
+    # persona_mappingを言語固有の辞書に変換
+    persona_mapping_raw = messages['common']['persona_mapping']
+    combined_messages['persona_mapping'] = {k: v[lang] for k, v in persona_mapping_raw.items()}
+    
+    return combined_messages
 
 def create_correlation_heatmap(reason_trends, lang='ja'):
     """ペルソナ間の相関分析とヒートマップの作成"""
@@ -26,8 +38,7 @@ def create_correlation_heatmap(reason_trends, lang='ja'):
     # ヒートマップの作成
     plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f', square=True)
-    messages_full = load_messages(lang)
-    messages = messages_full['persona_reason_similarity'][lang]
+    messages = load_messages(lang)
     plt.title(messages['correlation_title'], pad=20)
     plt.tight_layout()
     
@@ -42,9 +53,8 @@ def create_correlation_heatmap(reason_trends, lang='ja'):
 def analyze_reason_patterns(reason_trends, lang='ja'):
     """理由文長パターンの詳細分析"""
     pattern_analysis = {}
-    messages_full = load_messages(lang)
-    messages = messages_full['persona_reason_similarity'][lang]
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    messages = load_messages(lang)
+    reason_dimensions = messages['reason_dimensions']
     
     # 各ペルソナの理由文長パターンを分析
     for persona in reason_trends.index:
@@ -68,9 +78,8 @@ def visualize_reason_patterns(reason_trends, lang='ja'):
     """理由文長パターンの可視化"""
     # データの準備
     data = reason_trends.copy()
-    messages_full = load_messages(lang)
-    messages = messages_full['persona_reason_similarity'][lang]
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    messages = load_messages(lang)
+    reason_dimensions = messages['reason_dimensions']
     data.columns = [reason_dimensions[col] for col in data.columns]
     
     # レーダーチャートの作成
@@ -109,31 +118,29 @@ def visualize_reason_patterns(reason_trends, lang='ja'):
 
 def print_pattern_analysis(pattern_analysis, lang='ja'):
     """理由文長パターン分析結果の表示"""
-    messages_full = load_messages(lang)
-    messages = messages_full['persona_reason_similarity'][lang]
-    print("\nペルソナごとの理由文長パターン分析:")
+    messages = load_messages(lang)
+    print(f"\n{messages['header_text']}")
     for persona, analysis in pattern_analysis.items():
         print(f"\n{persona}:")
-        print(f"  最も長い理由: {analysis['longest_reason']} ({analysis['max_length']:.2f}文字)")
-        print(f"  最も短い理由: {analysis['shortest_reason']} ({analysis['min_length']:.2f}文字)")
-        print(f"  平均文字数: {analysis['mean_length']:.2f}")
-        print(f"  文字数の標準偏差: {analysis['std_length']:.2f}")
-        print("  理由文長プロファイル:")
+        print(f"  {messages['longest_text']}: {analysis['longest_reason']} ({analysis['max_length']:.2f})")
+        print(f"  {messages['shortest_text']}: {analysis['shortest_reason']} ({analysis['min_length']:.2f})")
+        print(f"  {messages['mean_text']}: {analysis['mean_length']:.2f}")
+        print(f"  {messages['std_text']}: {analysis['std_length']:.2f}")
+        print(f"  {messages['profile_text']}:")
         for reason, length in analysis['length_profile'].items():
-            print(f"    {reason}: {length:.2f}文字")
+            print(f"    {reason}: {length:.2f}")
 
 def print_generated_files(lang='ja'):
     """生成されたファイルの一覧を表示"""
-    messages_full = load_messages(lang)
-    messages = messages_full['persona_reason_similarity'][lang]
-    print("\n生成されたファイル:")
-    print("\n1. 相関分析:")
+    messages = load_messages(lang)
+    print(f"\n{messages['generated_files']}")
+    print(f"\n{messages['correlation_files']}")
     print(f"- {os.path.join(OUTPUT_DIR, 'persona_reason_correlation.csv')}")
     figures_dir = os.path.join(OUTPUT_DIR, 'figures', lang)
     print(f"- {os.path.join(figures_dir, 'persona_reason_correlation.png')}")
     print(f"- {os.path.join(figures_dir, 'persona_reason_correlation.svg')}")
     
-    print("\n2. 理由文長パターン分析:")
+    print(f"\n{messages['pattern_files']}")
     print(f"- {os.path.join(figures_dir, 'persona_reason_patterns.png')}")
     print(f"- {os.path.join(figures_dir, 'persona_reason_patterns.svg')}")
 
@@ -141,31 +148,30 @@ def main(lang='ja'):
     # 出力ディレクトリの作成
     ensure_output_directories()
     
-    print("理由文長データを読み込んでいます...")
+    messages = load_messages(lang)
+    print(messages['loading_text'])
     # データの読み込みと前処理
     df = pd.read_csv(os.path.join(OUTPUT_DIR, 'persona_reason.csv'))
-    messages_full = load_messages(lang)
-    messages = messages_full['persona_reason_similarity'][lang]
     
     # モデルごとの平均を計算し、ペルソナをインデックスとして設定
-    reason_trends = df.groupby('persona')[list(messages_full['common']['reason_dimensions'].keys())].mean()
+    reason_trends = df.groupby('persona')[list(messages['reason_dimensions'].keys())].mean()
     # ペルソナ識別子を日本語名に変換
-    reason_trends.index = reason_trends.index.map(messages_full['common']['persona_mapping'])
+    reason_trends.index = reason_trends.index.map(messages['persona_mapping'])
     
-    print("相関分析を実行中...")
+    print(messages['correlation_text'])
     corr = create_correlation_heatmap(reason_trends, lang)
     
-    print("理由文長パターンを分析中...")
+    print(messages['pattern_text'])
     pattern_analysis = analyze_reason_patterns(reason_trends, lang)
     
-    print("理由文長パターンを可視化中...")
+    print(messages['visualization_text'])
     visualize_reason_patterns(reason_trends, lang)
     
     # 結果の表示
     print_pattern_analysis(pattern_analysis, lang)
     
-    print("\n分析が完了しました。")
-    print(f"結果は '{OUTPUT_DIR}' ディレクトリに保存されました。")
+    print(f"\n{messages['completion_text']}")
+    print(messages['save_text'].format(OUTPUT_DIR))
     print_generated_files(lang)
 
 if __name__ == "__main__":

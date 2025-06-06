@@ -45,13 +45,17 @@ VISUALIZATION_CONFIG = {
     'figure': {
         'default_size': (20, 12),
         'dpi': 300,
+        'title_fontsize': 38.4,
+        'label_fontsize': 26.88,
+        'tick_labelsize': 23.04,
+        'legend_fontsize': 23.04,
     },
     'plot': {
         'grid_alpha': 0.3,
         'text_box_alpha': 0.8,
     },
     'save': {
-        'formats': ['png', 'svg'],
+        'formats': ['png', 'pdf'],
         'bbox_inches': 'tight'
     }
 }

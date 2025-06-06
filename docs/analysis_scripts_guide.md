@@ -254,7 +254,7 @@ This document provides an overview of the main data analysis Python scripts used
 - **Note**: It is recommended to run `src/persona_emotion_visualize.py` after executing `src/persona_emotion_analysis.py`.
 
 ### 22. `src/persona_model_emotion.py`
-- **Description**: Analyzes and visualizes the relationship between personas and emotional dimensions for each model. Displays persona evaluation values for each model as bar charts for each emotional dimension (Q1-Q4).
+- **Description**: Analyzes and visualizes the relationship between personas and emotional dimensions for each model. It generates a single combined image file that vertically arranges bar charts for all four emotional dimensions (Q1-Q4), with a common legend and X-axis (model names displayed only on the bottommost chart).
 - **Execution**: Run the following command from the project root directory.
   ```bash
   python ./src/persona_model_emotion.py [--lang {ja,en}]
@@ -264,10 +264,8 @@ This document provides an overview of the main data analysis Python scripts used
     - `ja`: Japanese
     - `en`: English
 - **Generated Files**: 
-  - `results/figures/en/persona_model_emotion_q1.png`, `results/figures/en/persona_model_emotion_q1.svg`
-  - `results/figures/en/persona_model_emotion_q2.png`, `results/figures/en/persona_model_emotion_q2.svg`
-  - `results/figures/en/persona_model_emotion_q3.png`, `results/figures/en/persona_model_emotion_q3.svg`
-  - `results/figures/en/persona_model_emotion_q4.png`, `results/figures/en/persona_model_emotion_q4.svg`
+  - `results/figures/en/persona_model_emotion_combined.png`
+  - `results/figures/en/persona_model_emotion_combined.svg`
   - (Japanese versions in `results/figures/ja/`)
 - **Note**: This script reads `data_all.csv` directly.
 

@@ -20,7 +20,7 @@ def load_messages(lang):
 def create_bar_plot(data, texts, lang='ja'):
     """棒グラフによる感情次元の平均値比較を作成"""
     messages_full = load_messages(lang)
-    messages = messages_full[lang]['text_emotion']
+    messages = messages_full['text_emotion'][lang]
     fig, gs = setup_figure()
     ax = fig.add_subplot(111)
 
@@ -30,24 +30,31 @@ def create_bar_plot(data, texts, lang='ja'):
     # 言語に応じた感情次元の定義を使用
     emotions = messages_full['common']['emotion_dimensions']
     
-    # 感情次元ごとの透明度を設定
-    alphas = [0.4, 0.6, 0.8, 1.0]  # 面白さから怒りまで徐々に濃く
-    colors = ['#4285F4', '#4285F4', '#4285F4', '#4285F4']  # 統一的な色使い
+    # 感情次元ごとの色をseabornのデフォルトパレットから取得
+    # 感情次元の数に合わせて色を生成
+    num_emotions = len(emotions)
+    colors = sns.color_palette(n_colors=num_emotions)
+    
+    # 感情次元ごとの透明度を設定 (必要であれば調整)
+    # alphas = [0.4, 0.6, 0.8, 1.0] # 今回は使用しないか、colorsに直接alphaを含める
 
     # 各文学作品のデータをプロット
     bar_width = 0.2
     x = range(len(texts))
     
     # 各感情次元のデータを計算
-    for i, (col, label) in enumerate(emotions.items()):
+    for i, (col, label_dict) in enumerate(emotions.items()):
+        label = label_dict[lang] # 言語に応じたラベルを取得
         values = []
         for text_name in texts:
-            text_id = [k for k, v in messages_full['common']['text_mapping'].items() if v == text_name][0]
+            # text_mappingが辞書を返すように変更されたため、対応するキーを検索
+            text_id = [k for k, v in messages_full['common']['text_mapping'].items() if v[lang] == text_name][0]
             value = data[data['text'] == text_id][col].mean()
             values.append(value)
         
+        # alphaはcolorsに含めず、別途設定する場合はここで適用
         bars = ax.bar([p + i * bar_width for p in x], values, bar_width,
-                      label=label, alpha=alphas[i], color=colors[i])
+                      label=label, color=colors[i]) # alphaはcolorsに含めない
         
         # 値のラベルを表示
         for bar in bars:
@@ -56,13 +63,14 @@ def create_bar_plot(data, texts, lang='ja'):
                    f'{height:.1f}', ha='center', va='bottom')
 
     # グラフの設定
-    ax.set_xlabel(messages['xlabel'])
-    ax.set_ylabel(messages['ylabel'])
-    ax.set_title(messages['bar_plot_title'])
+    ax.set_xlabel(messages['xlabel'], fontsize=14)
+    ax.set_ylabel(messages['ylabel'], fontsize=14)
+    ax.set_title(messages['bar_plot_title'], fontsize=16)
     ax.set_xticks([p + 1.5 * bar_width for p in x])
-    ax.set_xticklabels(texts)
+    ax.set_xticklabels(texts, fontsize=12)
+    ax.tick_params(axis='y', labelsize=12) # Y軸目盛りラベルのフォントサイズ
     ax.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
-    ax.legend(title=messages['emotion_legend_title'])
+    ax.legend(title=messages['emotion_legend_title'], title_fontsize=13, fontsize=12)
 
     # レイアウトの調整
     plt.tight_layout()
@@ -72,7 +80,7 @@ def create_bar_plot(data, texts, lang='ja'):
 def create_distribution_plot(data, texts, lang='ja'):
     """バイオリンプロットとスウォームプロットによる分布の可視化"""
     messages_full = load_messages(lang)
-    messages = messages_full[lang]['text_emotion']
+    messages = messages_full['text_emotion'][lang]
     fig, gs = setup_figure()
     ax = fig.add_subplot(111)
 
@@ -80,13 +88,17 @@ def create_distribution_plot(data, texts, lang='ja'):
     emotions = messages_full['common']['emotion_dimensions']
     
     # データを縦持ちに変換
+    # value_mappingを言語に応じたものに変換
+    emotion_value_mapping = {k: v[lang] for k, v in emotions.items()}
     melted_data = create_melted_data(data, 
                                      id_vars=['text'],
                                      value_vars=list(emotions.keys()),
-                                     value_mapping=emotions)
+                                     value_mapping=emotion_value_mapping)
 
     # テキスト識別子を言語別名に変換
-    melted_data['text'] = melted_data['text'].map(messages_full['common']['text_mapping'])
+    # text_mappingが辞書を返すように変更されたため、mapに渡す辞書も言語に応じたものに変換
+    text_mapping_for_map = {k: v[lang] for k, v in messages_full['common']['text_mapping'].items()}
+    melted_data['text'] = melted_data['text'].map(text_mapping_for_map)
     melted_data['text'] = pd.Categorical(melted_data['text'], categories=texts, ordered=True)
 
     # バイオリンプロット
@@ -98,11 +110,13 @@ def create_distribution_plot(data, texts, lang='ja'):
                   ax=ax, dodge=True, size=3, alpha=0.4)
 
     # グラフの設定
-    ax.set_title(messages['distribution_plot_title'])
-    ax.set_xlabel(messages['emotion_xlabel'])
-    ax.set_ylabel(messages['emotion_ylabel'])
+    ax.set_title(messages['distribution_plot_title'], fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+    ax.set_xlabel(messages['emotion_xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    ax.set_ylabel(messages['emotion_ylabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    ax.tick_params(axis='x', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize']) # X軸目盛りラベルのフォントサイズ
+    ax.tick_params(axis='y', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize']) # Y軸目盛りラベルのフォントサイズ
     ax.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
-    ax.legend(title=messages['emotion_legend_title'], bbox_to_anchor=(1.05, 1), loc='upper left')
+    ax.legend(title=messages['emotion_legend_title'], title_fontsize=VISUALIZATION_CONFIG['figure']['legend_fontsize'], fontsize=VISUALIZATION_CONFIG['figure']['legend_fontsize'], bbox_to_anchor=(1.05, 1), loc='upper left')
 
     # レイアウトの調整
     plt.tight_layout()
@@ -119,7 +133,8 @@ def main(lang='ja'):
     
     # 文学作品の順序を定義（言語に応じて）
     messages_full = load_messages(lang)
-    texts = list(messages_full['common']['text_mapping'].values())
+    # text_mappingが辞書を返すように変更されたため、values()ではなく、言語に応じた値のリストを取得
+    texts = [v[lang] for v in messages_full['common']['text_mapping'].values()]
 
     # 2つのグラフを生成
     create_bar_plot(df, texts, lang)
@@ -127,13 +142,15 @@ def main(lang='ja'):
 
     # 文学作品ごとの平均値を表示
     print("\n文学作品ごとの感情次元平均値:")
-    messages = messages_full[lang]['text_emotion']
+    messages = messages_full['text_emotion'][lang]
     emotions = messages_full['common']['emotion_dimensions']
     for text_name in texts:
         print(f"\n{text_name}:")
-        text_id = [k for k, v in messages_full['common']['text_mapping'].items() if v == text_name][0]
+        # text_mappingが辞書を返すように変更されたため、対応するキーを検索
+        text_id = [k for k, v in messages_full['common']['text_mapping'].items() if v[lang] == text_name][0]
         text_data = df[df['text'] == text_id]
-        for col, label in emotions.items():
+        for col, label_dict in emotions.items():
+            label = label_dict[lang] # 言語に応じたラベルを取得
             print(f"  {label}: {text_data[col].mean():.2f}")
 
     lang_dir = 'ja' if lang == 'ja' else 'en'

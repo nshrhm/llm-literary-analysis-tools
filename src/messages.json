@@ -30,12 +30,14 @@
   "persona_model_emotion": {
     "ja": {
       "title": "{emotion}の分布（モデル・ペルソナ別）",
+      "combined_title": "ペルソナ別・モデル別 感情評価値（全感情次元）",
       "xlabel": "モデル",
       "ylabel": "値",
       "legend_title": "ペルソナ"
     },
     "en": {
       "title": "Distribution of {emotion} by Model and Persona",
+      "combined_title": "Persona-specific & Model-specific Emotion Scores (All Dimensions)",
       "xlabel": "Model",
       "ylabel": "Value",
       "legend_title": "Persona",
@@ -51,7 +53,7 @@
     "emotion_dimensions": {
       "Q1value": {
         "ja": "面白さ",
-        "en": "Interest"
+        "en": "Interesting"
       },
       "Q2value": {
         "ja": "驚き",
@@ -69,7 +71,7 @@
     "reason_dimensions": {
       "Q1reason": {
         "ja": "面白さの理由",
-        "en": "Reason for Interest"
+        "en": "Reason for Interesting"
       },
       "Q2reason": {
         "ja": "驚きの理由",
@@ -103,9 +105,18 @@
       }
     },
     "text_mapping": {
-      "t1": "懐中時計",
-      "t2": "お金とピストル",
-      "t3": "ぼろぼろな駝鳥"
+      "t1": {
+        "ja": "懐中時計",
+        "en": "Pocket Watch"
+      },
+      "t2": {
+        "ja": "お金とピストル",
+        "en": "Money and Pistol"
+      },
+      "t3": {
+        "ja": "ぼろぼろな駝鳥",
+        "en": "The Ragged Ostrich"
+      }
     },
     "persona_colors": {
       "p1": "#4285F4",
@@ -176,6 +187,406 @@
       "cluster_center_label": "Cluster Centers",
       "silhouette_xlabel": "Number of Clusters",
       "silhouette_ylabel": "Silhouette Score"
+    }
+  },
+  "model_emotion": {
+    "ja": {
+      "header_text": "モデルごとの感情次元平均値",
+      "xlabel": "モデル",
+      "ylabel": "値",
+      "vendor_legend_title": "開発元",
+      "bar_plot_title": "モデルごとの感情次元評価",
+      "distribution_plot_title": "モデルごとの感情分布",
+      "emotion_xlabel": "感情次元",
+      "emotion_ylabel": "感情値"
+    },
+    "en": {
+      "header_text": "Average Emotional Dimension Values by Model",
+      "xlabel": "Model",
+      "ylabel": "Value",
+      "vendor_legend_title": "Vendor",
+      "bar_plot_title": "Emotional Dimension Evaluation by Model",
+      "distribution_plot_title": "Emotion Distribution by Model",
+      "emotion_xlabel": "Emotional Dimension",
+      "emotion_ylabel": "Emotion Value"
+    }
+  },
+  "text_emotion": {
+    "ja": {
+      "header_text": "文学作品ごとの感情次元平均値",
+      "xlabel": "文学作品",
+      "ylabel": "値",
+      "emotion_legend_title": "感情次元",
+      "bar_plot_title": "文学作品ごとの感情次元評価",
+      "distribution_plot_title": "文学作品ごとの感情分布",
+      "emotion_xlabel": "文学作品",
+      "emotion_ylabel": "感情値"
+    },
+    "en": {
+      "header_text": "Average Emotional Dimension Values by Literary Work",
+      "xlabel": "Literary Work",
+      "ylabel": "Value",
+      "emotion_legend_title": "Emotional Dimension",
+      "bar_plot_title": "Emotional Dimension Evaluation by Literary Work",
+      "distribution_plot_title": "Emotion Distribution by Literary Work",
+      "emotion_xlabel": "Literary Work",
+      "emotion_ylabel": "Emotion Value"
+    }
+  },
+  "text_emotion_similarity": {
+    "ja": {
+      "loading_text": "感情評価データを読み込んでいます...",
+      "correlation_text": "相関分析を実行中...",
+      "pattern_text": "感情パターンを分析中...",
+      "visualization_text": "感情パターンを可視化中...",
+      "completion_text": "分析が完了しました。",
+      "save_text": "結果は '{}' ディレクトリに保存されました。",
+      "generated_files": "生成されたファイル:",
+      "correlation_files": "1. 相関分析:",
+      "pattern_files": "2. 感情パターン分析:",
+      "header_text": "文学作品感情パターン分析:",
+      "dominant_text": "主要な感情",
+      "min_text": "最も弱い感情",
+      "mean_text": "平均感情値",
+      "std_text": "感情値の標準偏差",
+      "profile_text": "感情プロファイル",
+      "correlation_title": "文章間の感情評価相関",
+      "xlabel_pca": "第1主成分",
+      "ylabel_pca": "第2主成分",
+      "pattern_title": "感情パターンの比較",
+      "legend_title": "文学作品"
+    },
+    "en": {
+      "loading_text": "Loading emotional evaluation data...",
+      "correlation_text": "Running correlation analysis...",
+      "pattern_text": "Analyzing emotion patterns...",
+      "visualization_text": "Visualizing emotion patterns...",
+      "completion_text": "Analysis complete.",
+      "save_text": "Results have been saved to the '{}' directory.",
+      "generated_files": "Generated Files:",
+      "correlation_files": "1. Correlation Analysis:",
+      "pattern_files": "2. Emotion Pattern Analysis:",
+      "header_text": "Literary Work Emotion Pattern Analysis:",
+      "dominant_text": "Dominant Emotion",
+      "min_text": "Weakest Emotion",
+      "mean_text": "Mean Value",
+      "std_text": "Standard Deviation",
+      "profile_text": "Emotion Profile",
+      "correlation_title": "Correlation of Emotional Evaluations between Texts",
+      "xlabel_pca": "First Principal Component",
+      "ylabel_pca": "Second Principal Component",
+      "pattern_title": "Comparison of Emotional Patterns",
+      "legend_title": "Literary Works"
+    }
+  },
+  "model_reason": {
+    "ja": {
+      "header_text": "モデルごとの理由文長平均値",
+      "xlabel": "モデル",
+      "ylabel": "文字数",
+      "reason_legend_title": "理由項目",
+      "vendor_legend_title": "開発元",
+      "bar_plot_title": "モデルごとの理由文長",
+      "distribution_plot_title": "モデルごとの理由文長分布",
+      "reason_xlabel": "理由項目",
+      "reason_ylabel": "文字数",
+      "sorted_individual_plot_title": "{reason_label}でソートした理由文長"
+    },
+    "en": {
+      "header_text": "Average Reason Text Length by Model",
+      "xlabel": "Model",
+      "ylabel": "Character Count",
+      "reason_legend_title": "Reason Category",
+      "vendor_legend_title": "Developer",
+      "bar_plot_title": "Reason Text Length by Model",
+      "distribution_plot_title": "Reason Text Length Distribution by Model",
+      "reason_xlabel": "Reason Category",
+      "reason_ylabel": "Character Count",
+      "sorted_individual_plot_title": "Reason Text Length Sorted by {reason_label}"
+    }
+  },
+  "model_reason_similarity": {
+    "ja": {
+      "correlation_title": "モデル間の理由文長相関",
+      "loading_data": "理由文長データを読み込んでいます...",
+      "running_correlation": "相関分析を実行中...",
+      "calculating_clusters": "最適なクラスター数を計算中...",
+      "optimal_clusters": "最適なクラスター数: {n_clusters}",
+      "running_fcm": "Fuzzy C-Means クラスタリングを実行中...",
+      "visualizing_results": "結果を可視化中...",
+      "generating_gradient": "- グラデーション表現の生成...",
+      "generating_membership": "- 所属度表示の生成...",
+      "analyzing_clusters": "クラスター特性を分析中...",
+      "completion_text": "分析が完了しました。",
+      "save_text": "結果は '{}' ディレクトリに保存されました。",
+      "generated_files": "生成されたファイル:",
+      "correlation_files": "1. 相関分析:",
+      "cluster_files": "2. クラスター分析:",
+      "fcm_files": "3. FCM分析結果:",
+      "silhouette_xlabel": "クラスター数",
+      "silhouette_ylabel": "シルエットスコア",
+      "silhouette_title": "最適なクラスター数の決定",
+      "cluster_center_label_gradient": "クラスター中心",
+      "cluster_center_label_membership": "クラスター中心",
+      "fcm_gradient_title": "FCMクラスタリング結果（グラデーション表現）",
+      "fcm_membership_title": "FCMクラスタリング結果（所属度表示）",
+      "cluster_description": "クラスター1: 短い理由文長\nクラスター2:長い理由文長",
+      "xlabel_pca": "第1主成分",
+      "ylabel_pca": "第2主成分",
+      "cluster_membership_description": "所属度の強さ：濃い色ほど強い所属度",
+      "analyzing_characteristics": "クラスター特性を分析中...",
+      "cluster_characteristics_header": "クラスター特性:",
+      "cluster_size": "サイズ: {size}モデル",
+      "mean_char_count": "平均文字数:",
+      "analysis_complete": "分析が完了しました。",
+      "results_saved_to": "結果は '{}' ディレクトリに保存されました。",
+      "generated_files_header": "生成されたファイル:",
+      "correlation_analysis_header": "1. 相関分析:",
+      "cluster_analysis_header": "2. クラスター分析:",
+      "fcm_analysis_header": "3. FCM分析結果:"
+    },
+    "en": {
+      "correlation_title": "Correlation of Reason Text Length between Models",
+      "loading_data": "Loading reason text length data...",
+      "running_correlation": "Running correlation analysis...",
+      "calculating_clusters": "Calculating optimal number of clusters...",
+      "optimal_clusters": "Optimal number of clusters: {n_clusters}",
+      "running_fcm": "Running Fuzzy C-Means clustering...",
+      "visualizing_results": "Visualizing results...",
+      "generating_gradient": "- Generating gradient representation...",
+      "generating_membership": "- Generating membership display...",
+      "analyzing_clusters": "Analyzing cluster characteristics...",
+      "completion_text": "Analysis complete.",
+      "save_text": "Results have been saved to the '{}' directory.",
+      "generated_files": "Generated Files:",
+      "correlation_files": "1. Correlation Analysis:",
+      "cluster_files": "2. Cluster Analysis:",
+      "fcm_files": "3. FCM Analysis Results:",
+      "silhouette_xlabel": "Number of Clusters",
+      "silhouette_ylabel": "Silhouette Score",
+      "silhouette_title": "Optimal Number of Clusters",
+      "cluster_center_label_gradient": "Cluster Centers",
+      "cluster_center_label_membership": "Cluster Centers",
+      "fcm_gradient_title": "FCM Clustering Results (Gradient Representation)",
+      "fcm_membership_title": "FCM Clustering Results (Membership Display)",
+      "cluster_description": "Cluster 1: Short reason text length\nCluster 2: Long reason text length",
+      "xlabel_pca": "1st Principal Component",
+      "ylabel_pca": "2nd Principal Component",
+      "cluster_membership_description": "Membership Strength: Darker colors indicate stronger membership",
+      "analyzing_characteristics": "Analyzing cluster characteristics...",
+      "cluster_characteristics_header": "Cluster Characteristics:",
+      "cluster_size": "Size: {size} models",
+      "mean_char_count": "Average character count:",
+      "analysis_complete": "Analysis complete.",
+      "results_saved_to": "Results have been saved to the '{}' directory.",
+      "generated_files_header": "Generated Files:",
+      "correlation_analysis_header": "1. Correlation Analysis:",
+      "cluster_analysis_header": "2. Cluster Analysis:",
+      "fcm_analysis_header": "3. FCM Analysis Results:"
+    }
+  },
+  "text_reason": {
+    "ja": {
+      "header_text": "文学作品ごとの理由文長平均値",
+      "xlabel": "文学作品",
+      "ylabel": "文字数",
+      "reason_legend_title": "理由項目",
+      "bar_plot_title": "文学作品ごとの理由文長",
+      "distribution_plot_title": "文学作品ごとの理由文長分布",
+      "reason_xlabel": "文学作品",
+      "reason_ylabel": "文字数"
+    },
+    "en": {
+      "header_text": "Average Reason Text Length by Literary Work",
+      "xlabel": "Literary Work",
+      "ylabel": "Character Count",
+      "reason_legend_title": "Reason Category",
+      "bar_plot_title": "Reason Text Length by Literary Work",
+      "distribution_plot_title": "Reason Text Length Distribution by Literary Work",
+      "reason_xlabel": "Literary Work",
+      "reason_ylabel": "Character Count"
+    }
+  },
+  "text_reason_similarity": {
+    "ja": {
+      "correlation_title": "文学作品間の理由文長相関",
+      "pattern_title": "文学作品ごとの理由文長パターン",
+      "legend_title": "文学作品",
+      "loading_text": "理由文長データを読み込んでいます...",
+      "correlation_text": "相関分析を実行中...",
+      "pattern_text": "理由文長パターンを分析中...",
+      "visualization_text": "理由文長パターンを可視化中...",
+      "completion_text": "分析が完了しました。",
+      "save_text": "結果は '{}' ディレクトリに保存されました。",
+      "generated_files": "生成されたファイル:",
+      "correlation_files": "1. 相関分析:",
+      "pattern_files": "2. パターン分析:",
+      "header_text": "文学作品理由文長パターン分析:",
+      "longest_text": "最も長い理由",
+      "shortest_text": "最も短い理由",
+      "mean_text": "平均文字数",
+      "std_text": "文字数の標準偏差",
+      "profile_text": "理由文長プロファイル"
+    },
+    "en": {
+      "correlation_title": "Correlation of Reason Text Length between Literary Works",
+      "pattern_title": "Reason Text Length Patterns by Literary Work",
+      "legend_title": "Literary Work",
+      "loading_text": "Loading reason text length data...",
+      "correlation_text": "Running correlation analysis...",
+      "pattern_text": "Analyzing reason text length patterns...",
+      "visualization_text": "Visualizing reason text length patterns...",
+      "completion_text": "Analysis complete.",
+      "save_text": "Results have been saved to the '{}' directory.",
+      "generated_files": "Generated Files:",
+      "correlation_files": "1. Correlation Analysis:",
+      "pattern_files": "2. Pattern Analysis:",
+      "header_text": "Literary Work Reason Text Length Pattern Analysis:",
+      "longest_text": "Longest reason",
+      "shortest_text": "Shortest reason",
+      "mean_text": "Average character count",
+      "std_text": "Character count standard deviation",
+      "profile_text": "Reason text length profile"
+    }
+  },
+  "persona_reason": {
+    "ja": {
+      "header_text": "ペルソナごとの理由文長平均値",
+      "xlabel": "ペルソナ",
+      "ylabel": "文字数",
+      "reason_legend_title": "理由項目",
+      "bar_plot_title": "ペルソナごとの理由文長",
+      "distribution_plot_title": "ペルソナごとの理由文長分布",
+      "reason_xlabel": "ペルソナ",
+      "reason_ylabel": "文字数"
+    },
+    "en": {
+      "header_text": "Average Reason Text Length by Persona",
+      "xlabel": "Persona",
+      "ylabel": "Character Count",
+      "reason_legend_title": "Reason Category",
+      "bar_plot_title": "Reason Text Length by Persona",
+      "distribution_plot_title": "Reason Text Length Distribution by Persona",
+      "reason_xlabel": "Persona",
+      "reason_ylabel": "Character Count"
+    }
+  },
+  "persona_reason_similarity": {
+    "ja": {
+      "correlation_title": "ペルソナ間の理由文長相関",
+      "pattern_title": "ペルソナごとの理由文長パターン",
+      "legend_title": "ペルソナ",
+      "loading_text": "理由文長データを読み込んでいます...",
+      "correlation_text": "相関分析を実行中...",
+      "pattern_text": "理由文長パターンを分析中...",
+      "visualization_text": "理由文長パターンを可視化中...",
+      "completion_text": "分析が完了しました。",
+      "save_text": "結果は '{}' ディレクトリに保存されました。",
+      "generated_files": "生成されたファイル:",
+      "correlation_files": "1. 相関分析:",
+      "pattern_files": "2. パターン分析:",
+      "header_text": "ペルソナごとの理由文長パターン分析:",
+      "longest_text": "最も長い理由",
+      "shortest_text": "最も短い理由",
+      "mean_text": "平均文字数",
+      "std_text": "文字数の標準偏差",
+      "profile_text": "理由文長プロファイル"
+    },
+    "en": {
+      "correlation_title": "Correlation of Reason Text Length between Personas",
+      "pattern_title": "Reason Text Length Patterns by Persona",
+      "legend_title": "Persona",
+      "loading_text": "Loading reason text length data...",
+      "correlation_text": "Running correlation analysis...",
+      "pattern_text": "Analyzing reason text length patterns...",
+      "visualization_text": "Visualizing reason text length patterns...",
+      "completion_text": "Analysis complete.",
+      "save_text": "Results have been saved to the '{}' directory.",
+      "generated_files": "Generated Files:",
+      "correlation_files": "1. Correlation Analysis:",
+      "pattern_files": "2. Pattern Analysis:",
+      "header_text": "Persona Reason Text Length Pattern Analysis:",
+      "longest_text": "Longest reason",
+      "shortest_text": "Shortest reason",
+      "mean_text": "Average character count",
+      "std_text": "Character count standard deviation",
+      "profile_text": "Reason text length profile"
+    }
+  },
+  "temperature_emotion": {
+    "ja": {
+      "header_text": "温度設定による感情次元変化",
+      "xlabel": "温度設定",
+      "ylabel": "感情値",
+      "title": "Temperature設定による感情次元の変化",
+      "legend_title": "感情次元",
+      "overall_plot_title": "Temperature設定による感情次元の全体変化",
+      "model_plot_title": "{emotion}のTemperature設定による変化（モデル別）",
+      "selected_plot_title": "{emotion}の統計的変化（上位・下位3モデル）",
+      "std_ylabel": "{emotion}の平均値と標準偏差"
+    },
+    "en": {
+      "header_text": "Emotional Dimension Changes by Temperature Setting",
+      "xlabel": "Temperature Setting",
+      "ylabel": "Emotion Value",
+      "title": "Changes in Emotional Dimensions by Temperature Setting",
+      "legend_title": "Emotional Dimension",
+      "overall_plot_title": "Overall Changes in Emotional Dimensions by Temperature Setting",
+      "model_plot_title": "Changes in {emotion} by Temperature Setting (by Model)",
+      "selected_plot_title": "Statistical Changes in {emotion} (Top/Bottom 3 Models)",
+      "std_ylabel": "Mean and Standard Deviation of {emotion}"
+    }
+  },
+  "temperature_reason": {
+    "ja": {
+      "header_text": "温度設定による理由文長変化",
+      "xlabel": "温度設定",
+      "ylabel": "文字数",
+      "title": "Temperature設定による理由文長の変化",
+      "legend_title": "理由項目",
+      "ylabel_similarity": "平均類似度",
+      "similarity_plot_title": "Temperature設定による理由文の類似度変化",
+      "ylabel_diversity": "多様性スコア",
+      "diversity_plot_title": "Temperature設定による理由文の多様性変化",
+      "correlation_xlabel": "モデル",
+      "correlation_similarity_ylabel": "類似度との相関",
+      "correlation_similarity_title": "Temperature設定と理由文類似度の相関",
+      "correlation_diversity_ylabel": "多様性との相関",
+      "correlation_diversity_title": "Temperature設定と理由文多様性の相関"
+    },
+    "en": {
+      "header_text": "Reason Text Length Changes by Temperature Setting",
+      "xlabel": "Temperature Setting",
+      "ylabel": "Character Count",
+      "title": "Changes in Reason Text Length by Temperature Setting",
+      "legend_title": "Reason Category",
+      "ylabel_similarity": "Average Similarity",
+      "similarity_plot_title": "Changes in Reason Text Similarity by Temperature Setting",
+      "ylabel_diversity": "Diversity Score",
+      "diversity_plot_title": "Changes in Reason Text Diversity by Temperature Setting",
+      "correlation_xlabel": "Model",
+      "correlation_similarity_ylabel": "Correlation with Similarity",
+      "correlation_similarity_title": "Correlation between Temperature Setting and Reason Text Similarity",
+      "correlation_diversity_ylabel": "Correlation with Diversity",
+      "correlation_diversity_title": "Correlation between Temperature Setting and Reason Text Diversity"
+    }
+  },
+  "missing_values": {
+    "ja": {
+      "no_data_message": "{col}の欠損値がありません",
+      "xlabel": "{col}の欠損値割合 (%)",
+      "ylabel": "モデル",
+      "plot_title": "{col}の欠損値分析",
+      "legend_title": "開発元",
+      "saved_message": "{col}のグラフを保存しました"
+    },
+    "en": {
+      "no_data_message": "No missing values found for {col}",
+      "xlabel": "Missing Value Percentage for {col} (%)",
+      "ylabel": "Model",
+      "plot_title": "Missing Value Analysis for {col}",
+      "legend_title": "Vendor",
+      "saved_message": "Graph for {col} has been saved"
     }
   }
 }

@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import argparse
 from config import (
     OUTPUT_DIR, EMOTION_DIMENSIONS, DATA_PATHS,
     ensure_output_directories, safe_read_csv
@@ -7,6 +8,13 @@ from config import (
 
 def analyze_emotion_trends():
     """モデルごとの感情次元傾向を分析"""
+    parser = argparse.ArgumentParser(description='Model emotion analysis')
+    parser.add_argument('--lang', choices=['ja', 'en'], default='ja', help='Language for output (ja or en)')
+    args = parser.parse_args()
+
+    # 感情次元の定義を取得
+    emotion_dimensions = {k: v[args.lang] for k, v in EMOTION_DIMENSIONS.items()}
+
     # 出力ディレクトリを作成
     ensure_output_directories()
     
@@ -22,6 +30,12 @@ def analyze_emotion_trends():
     emotion_trends.to_csv(output_file)
     
     print(f"感情次元傾向分析が完了しました。結果は '{output_file}' に保存されています。")
+    
+    # 結果を表示（ローカライズされた列名で）
+    print("\n分析結果:")
+    emotion_trends_display = emotion_trends.copy()
+    emotion_trends_display.columns = list(emotion_dimensions.values())
+    print(emotion_trends_display)
 
 if __name__ == "__main__":
     analyze_emotion_trends()

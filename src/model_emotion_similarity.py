@@ -242,6 +242,9 @@ def print_generated_files(lang='ja'):
     print(f"- {os.path.join(figures_dir, 'model_emotion_fcm_membership.svg')}")
 
 def main(lang='ja'):
+    # 感情次元の定義を取得
+    emotion_dimensions = {k: v[lang] for k, v in EMOTION_DIMENSIONS.items()}
+    
     # データの読み込み
     print("感情評価データを読み込んでいます...")
     emotion_trends = load_emotion_data().set_index('model')
@@ -272,7 +275,7 @@ def main(lang='ja'):
         print("平均値:")
         for emotion, value in info['mean'].items():
             if emotion.endswith('value'):
-                emotion_name = EMOTION_DIMENSIONS[emotion]
+                emotion_name = emotion_dimensions[emotion]
                 print(f"  {emotion_name}: {value:.2f}")
 
     print("\n分析が完了しました。")

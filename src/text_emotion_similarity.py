@@ -18,12 +18,22 @@ def load_messages(lang='ja'):
     with open('src/messages.json', 'r', encoding='utf-8') as f:
         messages = json.load(f)
     
-    # トップレベルのメッセージとtext_emotion_similarityセクションのメッセージを結合
-    combined_messages = messages[lang].copy()
-    combined_messages.update(messages['text_emotion_similarity'][lang])
+    # text_emotion_similarityセクションがない場合はデフォルトメッセージを使用
+    if 'text_emotion_similarity' in messages and lang in messages['text_emotion_similarity']:
+        combined_messages = messages['text_emotion_similarity'][lang].copy()
+    else:
+        # フォールバックとして基本的なメッセージを作成
+        combined_messages = {
+            'correlation_title': '文章間の感情評価相関' if lang == 'ja' else 'Correlation of Emotional Evaluations between Texts',
+            'xlabel_pca': '第1主成分' if lang == 'ja' else 'First Principal Component',
+            'ylabel_pca': '第2主成分' if lang == 'ja' else 'Second Principal Component',
+            'pattern_title': '感情パターンの比較' if lang == 'ja' else 'Comparison of Emotional Patterns',
+            'legend_title': '文学作品' if lang == 'ja' else 'Literary Works'
+        }
     
-    # text_mapping は common セクションにあるため、get_message を使用して取得
-    combined_messages['text_mapping'] = get_message('common.text_mapping', lang)
+    # text_mappingを言語固有の辞書に変換
+    text_mapping_raw = get_message('common.text_mapping', lang)
+    combined_messages['text_mapping'] = {k: v[lang] for k, v in text_mapping_raw.items()}
         
     return combined_messages
 
@@ -53,19 +63,23 @@ def analyze_emotion_patterns(emotion_trends, lang='ja'):
     pattern_analysis = {}
     messages = load_messages(lang) # messagesは他の場所で使用されているため残す
     
+    # emotion_dimensionsを言語固有の辞書に変換
+    emotion_dimensions_raw = get_message('common.emotion_dimensions', lang)
+    emotion_dimensions = {k: v[lang] for k, v in emotion_dimensions_raw.items()}
+    
     # 各文学作品の感情パターンを分析
     for text in emotion_trends.index:
         values = emotion_trends.loc[text]
         pattern_analysis[text] = {
-            'dominant_emotion': get_message('common.emotion_dimensions', lang)[values.idxmax()],
+            'dominant_emotion': emotion_dimensions[values.idxmax()],
             'max_value': values.max(),
-            'min_emotion': get_message('common.emotion_dimensions', lang)[values.idxmin()],
+            'min_emotion': emotion_dimensions[values.idxmin()],
             'min_value': values.min(),
             'mean_value': values.mean(),
             'std_value': values.std(),
             'emotion_profile': {
-                get_message('common.emotion_dimensions', lang)[col]: float(values[col])
-                for col in get_message('common.emotion_dimensions', lang).keys()
+                emotion_dimensions[col]: float(values[col])
+                for col in emotion_dimensions.keys()
             }
         }
     
@@ -76,7 +90,12 @@ def visualize_emotion_patterns(emotion_trends, lang='ja'):
     # データの準備
     data = emotion_trends.copy()
     messages = load_messages(lang) # messagesは他の場所で使用されているため残す
-    data.columns = [get_message('common.emotion_dimensions', lang)[col] for col in data.columns]
+    
+    # emotion_dimensionsを言語固有の辞書に変換
+    emotion_dimensions_raw = get_message('common.emotion_dimensions', lang)
+    emotion_dimensions = {k: v[lang] for k, v in emotion_dimensions_raw.items()}
+    
+    data.columns = [emotion_dimensions[col] for col in data.columns]
     
     # レーダーチャートの作成
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
@@ -149,8 +168,12 @@ def main(lang='ja'):
     df = pd.read_csv(os.path.join(OUTPUT_DIR, 'text_emotion.csv'))
     messages = load_messages(lang)
     
+    # emotion_dimensionsを言語固有の辞書に変換
+    emotion_dimensions_raw = get_message('common.emotion_dimensions', lang)
+    emotion_dimensions = {k: v[lang] for k, v in emotion_dimensions_raw.items()}
+    
     # モデルごとの平均を計算し、文学作品をインデックスとして設定
-    emotion_trends = df.groupby('text')[list(get_message('common.emotion_dimensions', lang).keys())].mean()
+    emotion_trends = df.groupby('text')[list(emotion_dimensions.keys())].mean()
     # テキスト識別子を言語名に変換
     emotion_trends.index = emotion_trends.index.map(messages['text_mapping'])
     

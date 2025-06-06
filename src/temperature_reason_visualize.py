@@ -17,7 +17,7 @@ def load_messages(lang):
     """言語に応じたメッセージを読み込む"""
     with open('src/messages.json', 'r', encoding='utf-8') as f:
         messages = json.load(f)
-    return messages[lang]['temperature_reason']
+    return messages['temperature_reason'][lang]
 
 def create_similarity_plot(diversity_df, lang='ja'):
     """平均類似度の変化をプロット（選抜モデル）"""

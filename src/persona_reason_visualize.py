@@ -20,7 +20,7 @@ def load_messages(lang):
 def create_bar_plot(data, personas, lang='ja'):
     """棒グラフによる理由文長の比較を作成"""
     messages_full = load_messages(lang)
-    messages = messages_full[lang]['persona_reason']
+    messages = messages_full['persona_reason'][lang]
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(1, 1)
     ax = fig.add_subplot(gs[0])
@@ -40,14 +40,17 @@ def create_bar_plot(data, personas, lang='ja'):
     bar_width = 0.2
     x = range(len(personas))
     
-    # 共通メッセージからreason_dimensionsを読み込む
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    # 共通メッセージからreason_dimensionsを読み込む（言語別）
+    reason_dimensions_raw = messages_full['common']['reason_dimensions']
+    reason_dimensions = {k: v[lang] for k, v in reason_dimensions_raw.items()}
     
     # 各理由文の文字数を計算
     for i, (col, label) in enumerate(reason_dimensions.items()):
         values = []
         for persona_name in personas:
-            persona_id = [k for k, v in messages_full['common']['persona_mapping'].items() if v == persona_name][0]
+            # persona_mapping逆引きのため、言語別の値を使用
+            persona_mapping = {v[lang]: k for k, v in messages_full['common']['persona_mapping'].items()}
+            persona_id = persona_mapping[persona_name]
             value = data[data['persona'] == persona_id][col].mean()
             values.append(value)
         
@@ -77,21 +80,23 @@ def create_bar_plot(data, personas, lang='ja'):
 def create_distribution_plot(data, personas, lang='ja'):
     """バイオリンプロットとスウォームプロットによる分布の可視化"""
     messages_full = load_messages(lang)
-    messages = messages_full[lang]['persona_reason']
+    messages = messages_full['persona_reason'][lang]
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(1, 1)
     ax = fig.add_subplot(gs[0])
 
     # データを縦持ちに変換
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    reason_dimensions_raw = messages_full['common']['reason_dimensions']
+    reason_dimensions = {k: v[lang] for k, v in reason_dimensions_raw.items()}
     melted_data = pd.melt(data, 
                          id_vars=['persona'],
-                         value_vars=list(reason_dimensions.keys()),
+                         value_vars=list(reason_dimensions_raw.keys()),
                          var_name='reason_type',
                          value_name='length')
 
     # ペルソナ識別子を言語別名に変換
-    melted_data['persona'] = melted_data['persona'].map(messages_full['common']['persona_mapping'])
+    persona_mapping = {k: v[lang] for k, v in messages_full['common']['persona_mapping'].items()}
+    melted_data['persona'] = melted_data['persona'].map(persona_mapping)
     
     # 理由ラベルを変換
     melted_data['reason_type'] = melted_data['reason_type'].map(reason_dimensions)
@@ -127,7 +132,8 @@ def main(lang='ja'):
     
     # ペルソナの順序を定義（言語に応じて）
     messages_full = load_messages(lang)
-    personas = list(messages_full['common']['persona_mapping'].values())
+    persona_mapping = {k: v[lang] for k, v in messages_full['common']['persona_mapping'].items()}
+    personas = list(persona_mapping.values())
 
     # 2つのグラフを生成
     create_bar_plot(df, personas, lang)
@@ -137,11 +143,14 @@ def main(lang='ja'):
     print("\nペルソナごとの理由文長平均値:")
     # 言語に応じたメッセージと共通メッセージを読み込む
     messages_full = load_messages(lang)
-    messages = messages_full[lang]['persona_reason']
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    messages = messages_full['persona_reason'][lang]
+    reason_dimensions_raw = messages_full['common']['reason_dimensions']
+    reason_dimensions = {k: v[lang] for k, v in reason_dimensions_raw.items()}
     for persona_name in personas:
         print(f"\n{persona_name}:")
-        persona_id = [k for k, v in messages_full['common']['persona_mapping'].items() if v == persona_name][0]
+        # persona_mapping逆引き辞書を使用
+        persona_id_mapping = {v[lang]: k for k, v in messages_full['common']['persona_mapping'].items()}
+        persona_id = persona_id_mapping[persona_name]
         persona_data = df[df['persona'] == persona_id]
         for col, label in reason_dimensions.items():
             print(f"  {label}: {persona_data[col].mean():.2f}")

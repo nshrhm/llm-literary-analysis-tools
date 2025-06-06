@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
+import argparse
 from scipy.stats import skew, kurtosis
 from config import (
-    OUTPUT_DIR, ANALYSIS_COLUMNS, EMOTION_DIMENSIONS, get_message
+    OUTPUT_DIR, ANALYSIS_COLUMNS, get_message
 )
 
 def calculate_statistics(data):
@@ -19,6 +20,12 @@ def calculate_statistics(data):
     return pd.Series(stats)
 
 def main():
+    # コマンドライン引数の設定
+    parser = argparse.ArgumentParser(description='ペルソナ感情統計の分析スクリプト')
+    parser.add_argument('--lang', choices=['ja', 'en'], default='ja',
+                       help='言語設定 (ja: 日本語, en: 英語)')
+    args = parser.parse_args()
+    
     # 入力データを読み込む
     input_path = f"{OUTPUT_DIR}/persona_emotion.csv"
     df = pd.read_csv(input_path)
@@ -26,7 +33,6 @@ def main():
     # ペルソナと感情次元のカラムを取得
     personas = df['persona'].unique()
     metric_cols = ANALYSIS_COLUMNS['values']
-    emotion_names_ja = get_message('common.emotion_dimensions', 'ja')
     
     # ペルソナごとに統計量を計算
     all_stats = []
@@ -57,11 +63,11 @@ def main():
     print("\n計算された統計情報:")
     print(combined_stats)
     
-    # 感情次元の日本語名での結果も表示
-    jp_cols = {col: get_message(f'common.emotion_dimensions.{col}.ja') for col in metric_cols}
-    stats_df_jp = combined_stats.rename(columns=jp_cols)
-    print("\n感情次元の統計情報（日本語）:")
-    print(stats_df_jp)
+    # 感情次元の選択された言語での結果も表示
+    localized_cols = {col: get_message(f'common.emotion_dimensions.{col}.{args.lang}') for col in metric_cols}
+    stats_df_localized = combined_stats.rename(columns=localized_cols)
+    print(f"\n感情次元の統計情報（{args.lang}）:")
+    print(stats_df_localized)
 
 if __name__ == "__main__":
     main()

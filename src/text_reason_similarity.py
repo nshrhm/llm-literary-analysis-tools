@@ -19,11 +19,13 @@ def load_messages(lang='ja'):
     
     combined_messages = messages['text_reason_similarity'][lang].copy()
     
-    # text_mapping は common セクションにあるため、get_message を使用して取得
-    combined_messages['text_mapping'] = get_message('common.text_mapping', lang)
+    # text_mapping は common セクションにあるため、言語別の値を辞書として構築
+    text_mapping_raw = get_message('common.text_mapping')
+    combined_messages['text_mapping'] = {k: v[lang] for k, v in text_mapping_raw.items()}
         
-    # reason_dimensions は common セクションにあるため、get_message を使用して取得
-    combined_messages['reason_dimensions'] = get_message('common.reason_dimensions', lang)
+    # reason_dimensions は common セクションにあるため、言語別の値を辞書として構築
+    reason_dimensions_raw = get_message('common.reason_dimensions')
+    combined_messages['reason_dimensions'] = {k: v[lang] for k, v in reason_dimensions_raw.items()}
         
     return combined_messages
 
@@ -51,20 +53,21 @@ def analyze_reason_patterns(reason_trends, lang='ja'):
     """理由文長パターンの詳細分析"""
     pattern_analysis = {}
     messages = load_messages(lang) # messagesは他の場所で使用されているため残す
+    reason_dimensions = get_message('common.reason_dimensions', lang)
     
     # 各文学作品の理由文長パターンを分析
     for text in reason_trends.index:
         values = reason_trends.loc[text]
         pattern_analysis[text] = {
-            'longest_reason': get_message('common.reason_dimensions', lang)[values.idxmax()],
+            'longest_reason': reason_dimensions[values.idxmax()][lang],
             'max_length': values.max(),
-            'shortest_reason': get_message('common.reason_dimensions', lang)[values.idxmin()],
+            'shortest_reason': reason_dimensions[values.idxmin()][lang],
             'min_length': values.min(),
             'mean_length': values.mean(),
             'std_length': values.std(),
             'length_profile': {
-                get_message('common.reason_dimensions', lang)[col]: float(values[col])
-                for col in get_message('common.reason_dimensions', lang).keys()
+                reason_dimensions[col][lang]: float(values[col])
+                for col in reason_dimensions.keys()
             }
         }
     
@@ -75,7 +78,8 @@ def visualize_reason_patterns(reason_trends, lang='ja'):
     # データの準備
     data = reason_trends.copy()
     messages = load_messages(lang) # messagesは他の場所で使用されているため残す
-    data.columns = [get_message('common.reason_dimensions', lang)[col] for col in data.columns]
+    reason_dimensions = get_message('common.reason_dimensions', lang)
+    data.columns = [reason_dimensions[col][lang] for col in data.columns]
     
     # レーダーチャートの作成
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])

@@ -289,7 +289,7 @@ def main(lang='ja'):
                 print(f"  {reason_name}: {value:.2f}")
 
     print(messages['analysis_complete'])
-    print(messages['results_saved_to'].format(output_dir=OUTPUT_DIR))
+    print(messages['results_saved_to'].format(OUTPUT_DIR))
     print_generated_files(lang)
 
 if __name__ == "__main__":

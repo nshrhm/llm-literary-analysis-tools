@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
+import argparse
 from scipy.stats import skew, kurtosis
 from config import (
-    OUTPUT_DIR, REASON_DIMENSIONS
+    OUTPUT_DIR, get_message
 )
 
 def calculate_statistics(data):
@@ -19,13 +20,23 @@ def calculate_statistics(data):
     return pd.Series(stats)
 
 def main():
+    # コマンドライン引数の設定
+    parser = argparse.ArgumentParser(description='ペルソナ理由統計の分析スクリプト')
+    parser.add_argument('--lang', choices=['ja', 'en'], default='ja',
+                       help='言語設定 (ja: 日本語, en: 英語)')
+    args = parser.parse_args()
+    
+    # 理由次元の取得
+    reason_dimensions_raw = get_message('common.reason_dimensions')
+    reason_dimensions = {k: v[args.lang] for k, v in reason_dimensions_raw.items()}
+    
     # 入力データを読み込む
     input_path = f"{OUTPUT_DIR}/persona_reason_average.csv"
     df = pd.read_csv(input_path)
     
     # ペルソナと理由文のカラムを取得
     personas = df['persona'].unique()
-    metric_cols = list(REASON_DIMENSIONS.keys())
+    metric_cols = list(reason_dimensions.keys())
     
     # ペルソナごとに統計量を計算
     all_stats = []
@@ -56,11 +67,10 @@ def main():
     print("\n計算された統計情報:")
     print(combined_stats)
     
-    # 理由文の日本語名での結果も表示
-    jp_cols = {col: REASON_DIMENSIONS[col] for col in metric_cols}
-    stats_df_jp = combined_stats.rename(columns=jp_cols)
-    print("\n理由文の統計情報（日本語）:")
-    print(stats_df_jp)
+    # 理由文の選択された言語での結果も表示
+    stats_df_localized = combined_stats.rename(columns=reason_dimensions)
+    print(f"\n理由文の統計情報（{args.lang}）:")
+    print(stats_df_localized)
 
 if __name__ == "__main__":
     main()

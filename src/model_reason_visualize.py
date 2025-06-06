@@ -30,7 +30,7 @@ def load_messages(lang):
     """言語に応じたメッセージを読み込む"""
     with open('src/messages.json', 'r', encoding='utf-8') as f:
         messages = json.load(f)
-    return messages[lang]['model_reason']
+    return messages['model_reason'][lang]
 
 def create_bar_plot(filtered_data, reasons, lang='ja'):
     """棒グラフによる理由文長の比較を作成"""

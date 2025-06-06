@@ -31,7 +31,7 @@ def load_messages(lang):
     """言語に応じたメッセージを読み込む"""
     with open('src/messages.json', 'r', encoding='utf-8') as f:
         messages = json.load(f)
-    return messages[lang]['model_emotion']
+    return messages['model_emotion'][lang]
 
 def create_bar_plot(filtered_data, emotions, lang='ja'):
     """棒グラフによる感情次元の平均値比較を作成"""
@@ -153,7 +153,8 @@ def main(lang='ja'):
 
     # 言語に応じた感情次元の定義を使用
     # messages = load_messages(lang) # messagesは他の場所で使用されているため残す
-    emotions = get_message('common.emotion_dimensions', lang)
+    emotion_dimensions_raw = get_message('common.emotion_dimensions', lang)
+    emotions = {k: v[lang] for k, v in emotion_dimensions_raw.items()}
 
     # 2つのグラフを生成
     create_bar_plot(filtered_data, emotions, lang)

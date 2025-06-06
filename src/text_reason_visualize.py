@@ -20,7 +20,7 @@ def load_messages(lang):
 def create_bar_plot(data, texts, lang='ja'):
     """棒グラフによる理由文長の平均値比較を作成"""
     messages_full = load_messages(lang)
-    messages = messages_full[lang]['text_reason']
+    messages = messages_full['text_reason'][lang]
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(1, 1)
     ax = fig.add_subplot(gs[0])
@@ -40,14 +40,17 @@ def create_bar_plot(data, texts, lang='ja'):
     bar_width = 0.2
     x = range(len(texts))
     
-    # 共通メッセージからreason_dimensionsを読み込む
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    # 共通メッセージからreason_dimensionsを読み込む（言語別）
+    reason_dimensions_raw = messages_full['common']['reason_dimensions']
+    reason_dimensions = {k: v[lang] for k, v in reason_dimensions_raw.items()}
     
     # 各理由文の文字数を計算
     for i, (col, label) in enumerate(reason_dimensions.items()):
         values = []
         for text_name in texts:
-            text_id = [k for k, v in messages_full['common']['text_mapping'].items() if v == text_name][0]
+            # text_mapping逆引きのため、言語別の値を使用
+            text_mapping = {v[lang]: k for k, v in messages_full['common']['text_mapping'].items()}
+            text_id = text_mapping[text_name]
             value = data[data['text'] == text_id][col].mean()
             values.append(value)
         
@@ -77,13 +80,14 @@ def create_bar_plot(data, texts, lang='ja'):
 def create_distribution_plot(data, texts, lang='ja'):
     """バイオリンプロットとスウォームプロットによる分布の可視化"""
     messages_full = load_messages(lang)
-    messages = messages_full[lang]['text_reason']
+    messages = messages_full['text_reason'][lang]
     fig = plt.figure(figsize=VISUALIZATION_CONFIG['figure']['default_size'])
     gs = fig.add_gridspec(1, 1)
     ax = fig.add_subplot(gs[0])
 
     # データを縦持ちに変換
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    reason_dimensions_raw = messages_full['common']['reason_dimensions']
+    reason_dimensions = {k: v[lang] for k, v in reason_dimensions_raw.items()}
     melted_data = pd.melt(data, 
                          id_vars=['text'],
                          value_vars=list(reason_dimensions.keys()),
@@ -91,7 +95,8 @@ def create_distribution_plot(data, texts, lang='ja'):
                          value_name='length')
 
     # テキスト識別子を言語別名に変換
-    melted_data['text'] = melted_data['text'].map(messages_full['common']['text_mapping'])
+    text_mapping = {k: v[lang] for k, v in messages_full['common']['text_mapping'].items()}
+    melted_data['text'] = melted_data['text'].map(text_mapping)
     
     # 理由ラベルを変換
     melted_data['reason_type'] = melted_data['reason_type'].map(reason_dimensions)
@@ -127,7 +132,8 @@ def main(lang='ja'):
     
     # 文学作品の順序を定義（言語に応じて）
     messages_full = load_messages(lang)
-    texts = list(messages_full['common']['text_mapping'].values())
+    text_mapping = {k: v[lang] for k, v in messages_full['common']['text_mapping'].items()}
+    texts = list(text_mapping.values())
 
     # 2つのグラフを生成
     create_bar_plot(df, texts, lang)
@@ -135,11 +141,14 @@ def main(lang='ja'):
 
     # 文学作品ごとの平均値を表示
     print("\n文学作品ごとの理由文長平均値:")
-    messages = messages_full[lang]['text_reason']
-    reason_dimensions = messages_full['common']['reason_dimensions']
+    messages = messages_full['text_reason'][lang]
+    reason_dimensions_raw = messages_full['common']['reason_dimensions']
+    reason_dimensions = {k: v[lang] for k, v in reason_dimensions_raw.items()}
     for text_name in texts:
         print(f"\n{text_name}:")
-        text_id = [k for k, v in messages_full['common']['text_mapping'].items() if v == text_name][0]
+        # text_mapping逆引き辞書を使用
+        text_id_mapping = {v[lang]: k for k, v in messages_full['common']['text_mapping'].items()}
+        text_id = text_id_mapping[text_name]
         text_data = df[df['text'] == text_id]
         for col, label in reason_dimensions.items():
             print(f"  {label}: {text_data[col].mean():.2f}")
