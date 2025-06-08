@@ -45,10 +45,10 @@ VISUALIZATION_CONFIG = {
     'figure': {
         'default_size': (20, 12),
         'dpi': 300,
-        'title_fontsize': 38.4,
-        'label_fontsize': 26.88,
-        'tick_labelsize': 23.04,
-        'legend_fontsize': 23.04,
+        'title_fontsize': 32,
+        'label_fontsize': 28,
+        'tick_labelsize': 24,
+        'legend_fontsize': 24,
     },
     'plot': {
         'grid_alpha': 0.3,

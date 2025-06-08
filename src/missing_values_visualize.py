@@ -16,13 +16,20 @@ def get_vendor_color(model_name):
             return VENDOR_COLORS[vendor]
     return '#808080'  # デフォルトの色（グレー）
 
+def format_column_name(col, lang='ja'):
+    """列名を表示用にフォーマット"""
+    if col == 'TotalMissing':
+        return 'Total Missing' if lang == 'en' else '全体の欠損値'
+    return col
+
 def plot_missing_values(df, col, messages, lang):
     """特定の項目の欠損値をプロット"""
     # 欠損値が0でないデータのみをフィルタリング
     filtered_df = df[df[col] > 0].copy()
     
     if filtered_df.empty:
-        print(messages['no_data_message'].format(col=col))
+        display_col = format_column_name(col, lang)
+        print(messages['no_data_message'].format(col=display_col))
         return
     
     # モデルの順序を設定
@@ -38,10 +45,13 @@ def plot_missing_values(df, col, messages, lang):
         bar.set_color(get_vendor_color(model))
         bar.set_alpha(0.8)
     
+    # 表示用の列名を取得
+    display_col = format_column_name(col, lang)
+    
     plt.yticks(range(len(filtered_df)), filtered_df['model'])
-    plt.xlabel(messages['xlabel'].format(col=col))
+    plt.xlabel(messages['xlabel'].format(col=display_col))
     plt.ylabel(messages['ylabel'])
-    plt.title(messages['plot_title'].format(col=col))
+    plt.title(messages['plot_title'].format(col=display_col))
     
     # 凡例を追加
     legend_elements = [plt.Rectangle((0,0),1,1, color=color, alpha=0.8, label=vendor)
@@ -54,7 +64,7 @@ def plot_missing_values(df, col, messages, lang):
     save_figure(plt, f'missing_values_{col.lower()}', lang=lang)
     plt.close()
     
-    print(messages['saved_message'].format(col=col))
+    print(messages['saved_message'].format(col=display_col))
 
 def main():
     # コマンドライン引数の解析

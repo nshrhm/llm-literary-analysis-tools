@@ -40,17 +40,20 @@ def create_similarity_plot(diversity_df, lang='ja'):
                     vendor = v
                     break
             color = VENDOR_COLORS.get(vendor, 'gray') if vendor else 'gray'
-            label = f"{model} ({'高多様性' if model in high_diversity_models else '低多様性'})"
+            label = f"{model} ({messages['high_diversity'] if model in high_diversity_models else messages['low_diversity']})"
             plt.plot(model_data['temperature'], model_data['mean_similarity'], marker='o', label=label, color=color)
 
     # 全体平均を計算してプロット
     overall_mean_similarity = diversity_df.groupby('temperature')['mean_similarity'].mean().sort_index()
-    plt.plot(overall_mean_similarity.index, overall_mean_similarity.values, marker='s', linestyle='--', color='black', label='全体平均')
+    plt.plot(overall_mean_similarity.index, overall_mean_similarity.values, marker='s', linestyle='--', color='black', label=messages['overall_average'])
 
-    plt.xlabel(messages['xlabel'])
-    plt.ylabel(messages['ylabel_similarity'])
-    plt.title(messages['similarity_plot_title'])
-    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    plt.xlabel(messages['xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.ylabel(messages['ylabel_similarity'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.title(messages['similarity_plot_title'], fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+    plt.tick_params(axis='x', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.tick_params(axis='y', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.,
+               fontsize=VISUALIZATION_CONFIG['figure']['legend_fontsize'])
     plt.grid(True, alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
     plt.tight_layout()
     save_figure(plt, "temperature_reason_similarity_selected", lang=lang)
@@ -77,17 +80,20 @@ def create_diversity_plot(diversity_df, lang='ja'):
                     vendor = v
                     break
             color = VENDOR_COLORS.get(vendor, 'gray') if vendor else 'gray'
-            label = f"{model} ({'高多様性' if model in high_diversity_models else '低多様性'})"
+            label = f"{model} ({messages['high_diversity'] if model in high_diversity_models else messages['low_diversity']})"
             plt.plot(model_data['temperature'], model_data['diversity_score'], marker='o', label=label, color=color)
 
     # 全体平均を計算してプロット
     overall_mean_diversity = diversity_df.groupby('temperature')['diversity_score'].mean().sort_index()
-    plt.plot(overall_mean_diversity.index, overall_mean_diversity.values, marker='s', linestyle='--', color='black', label='全体平均')
+    plt.plot(overall_mean_diversity.index, overall_mean_diversity.values, marker='s', linestyle='--', color='black', label=messages['overall_average'])
 
-    plt.xlabel(messages['xlabel'])
-    plt.ylabel(messages['ylabel_diversity'])
-    plt.title(messages['diversity_plot_title'])
-    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    plt.xlabel(messages['xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.ylabel(messages['ylabel_diversity'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.title(messages['diversity_plot_title'], fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+    plt.tick_params(axis='x', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.tick_params(axis='y', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.,
+               fontsize=VISUALIZATION_CONFIG['figure']['legend_fontsize'])
     plt.grid(True, alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
     plt.tight_layout()
     save_figure(plt, "temperature_reason_diversity_selected", lang=lang)
@@ -112,17 +118,19 @@ def create_correlation_plots(correlation_df, lang='ja'):
         bar = plt.bar(model, sorted_df_similarity[sorted_df_similarity['model'] == model]['corr_similarity'], color=color)
         bars.extend(bar)
 
-    plt.xlabel(messages['correlation_xlabel'])
-    plt.ylabel(messages['correlation_similarity_ylabel'])
-    plt.title(messages['correlation_similarity_title'])
-    plt.xticks(rotation=90)
+    plt.xlabel(messages['correlation_xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.ylabel(messages['correlation_similarity_ylabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.title(messages['correlation_similarity_title'], fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+    plt.xticks(rotation=90, fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.yticks(fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
     plt.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
     plt.tight_layout()
     
     # 各棒の上に値を表示
     for bar in bars:
         yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.2f}', ha='center', va='bottom' if yval >= 0 else 'top')
+        plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.2f}', ha='center', va='bottom' if yval >= 0 else 'top',
+                fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'] * 0.6)
     
     save_figure(plt, "temperature_reason_correlation_similarity_sorted", lang=lang)
     plt.close()
@@ -142,17 +150,19 @@ def create_correlation_plots(correlation_df, lang='ja'):
         bar = plt.bar(model, sorted_df_diversity[sorted_df_diversity['model'] == model]['corr_diversity'], color=color)
         bars.extend(bar)
 
-    plt.xlabel(messages['correlation_xlabel'])
-    plt.ylabel(messages['correlation_diversity_ylabel'])
-    plt.title(messages['correlation_diversity_title'])
-    plt.xticks(rotation=90)
+    plt.xlabel(messages['correlation_xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.ylabel(messages['correlation_diversity_ylabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.title(messages['correlation_diversity_title'], fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+    plt.xticks(rotation=90, fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.yticks(fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
     plt.grid(True, axis='y', alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
     plt.tight_layout()
     
     # 各棒の上に値を表示
     for bar in bars:
         yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.2f}', ha='center', va='bottom' if yval >= 0 else 'top')
+        plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.2f}', ha='center', va='bottom' if yval >= 0 else 'top',
+                fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'] * 0.6)
     
     save_figure(plt, "temperature_reason_correlation_diversity_sorted", lang=lang)
     plt.close()

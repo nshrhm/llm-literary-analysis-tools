@@ -23,10 +23,13 @@ def create_overall_plot(emotion_df, emotions, messages_lang, lang='ja'):
     for col, label in emotions.items():
         temp_means = emotion_df.groupby('temperature')[col].mean()
         plt.plot(temp_means.index, temp_means.values, marker='o', label=label)
-    plt.xlabel(messages['xlabel'])
-    plt.ylabel(messages['ylabel'])
-    plt.title(messages['overall_plot_title'])
-    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    plt.xlabel(messages['xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.ylabel(messages['ylabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+    plt.title(messages['overall_plot_title'], fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+    plt.tick_params(axis='x', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.tick_params(axis='y', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., 
+               fontsize=VISUALIZATION_CONFIG['figure']['legend_fontsize'])
     plt.grid(True, alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
     plt.tight_layout()
     save_figure(plt, "temperature_emotion_overall", lang=lang)
@@ -41,10 +44,13 @@ def create_model_plots(emotion_df, emotions, messages_lang, lang='ja'):
             model_data = emotion_df[emotion_df['model'] == model]
             if not model_data.empty:
                 plt.plot(model_data['temperature'], model_data[col], marker='o', label=model)
-        plt.xlabel(messages['xlabel'])
-        plt.ylabel(messages['ylabel'])
-        plt.title(messages['model_plot_title'].format(emotion=label))
-        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+        plt.xlabel(messages['xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+        plt.ylabel(messages['ylabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+        plt.title(messages['model_plot_title'].format(emotion=label), fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+        plt.tick_params(axis='x', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+        plt.tick_params(axis='y', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.,
+                   fontsize=VISUALIZATION_CONFIG['figure']['legend_fontsize'])
         plt.grid(True, alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
         plt.tight_layout()
         save_figure(plt, f"temperature_emotion_{col}_all", lang=lang)
@@ -67,10 +73,13 @@ def create_selected_model_plots(emotion_df, stats_df, emotions, messages_lang, l
                 jittered_temp = model_data['temperature'] + (i - 2.5) * jitter
                 plt.errorbar(jittered_temp, model_data[f"{col}_mean"], 
                            yerr=model_data[f"{col}_std"], marker='o', label=model, capsize=5)
-        plt.xlabel(messages['xlabel'])
-        plt.ylabel(messages['std_ylabel'].format(emotion=label))
-        plt.title(messages['selected_plot_title'].format(emotion=label))
-        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+        plt.xlabel(messages['xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+        plt.ylabel(messages['std_ylabel'].format(emotion=label), fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
+        plt.title(messages['selected_plot_title'].format(emotion=label), fontsize=VISUALIZATION_CONFIG['figure']['title_fontsize'])
+        plt.tick_params(axis='x', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+        plt.tick_params(axis='y', labelsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.,
+                   fontsize=VISUALIZATION_CONFIG['figure']['legend_fontsize'])
         plt.grid(True, alpha=VISUALIZATION_CONFIG['plot']['grid_alpha'])
         plt.tight_layout()
         save_figure(plt, f"temperature_emotion_{col}_std_selected", lang=lang)
