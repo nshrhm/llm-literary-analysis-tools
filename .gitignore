@@ -1,3 +1,8 @@
 # Data files
 data_all.csv
 __pycache__
+
+# 作業ディレクトリ
+paper/
+tsv/
+temp_test.log

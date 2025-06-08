@@ -552,10 +552,7 @@
       "correlation_similarity_ylabel": "類似度との相関",
       "correlation_similarity_title": "Temperature設定と理由文類似度の相関",
       "correlation_diversity_ylabel": "多様性との相関",
-      "correlation_diversity_title": "Temperature設定と理由文多様性の相関",
-      "high_diversity": "高多様性",
-      "low_diversity": "低多様性",
-      "overall_average": "全体平均"
+      "correlation_diversity_title": "Temperature設定と理由文多様性の相関"
     },
     "en": {
       "header_text": "Reason Text Length Changes by Temperature Setting",
@@ -571,10 +568,7 @@
       "correlation_similarity_ylabel": "Correlation with Similarity",
       "correlation_similarity_title": "Correlation between Temperature Setting and Reason Text Similarity",
       "correlation_diversity_ylabel": "Correlation with Diversity",
-      "correlation_diversity_title": "Correlation between Temperature Setting and Reason Text Diversity",
-      "high_diversity": "High Diversity",
-      "low_diversity": "Low Diversity",
-      "overall_average": "Overall Average"
+      "correlation_diversity_title": "Correlation between Temperature Setting and Reason Text Diversity"
     }
   },
   "missing_values": {

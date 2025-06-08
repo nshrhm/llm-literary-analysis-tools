@@ -40,12 +40,12 @@ def create_similarity_plot(diversity_df, lang='ja'):
                     vendor = v
                     break
             color = VENDOR_COLORS.get(vendor, 'gray') if vendor else 'gray'
-            label = f"{model} ({messages['high_diversity'] if model in high_diversity_models else messages['low_diversity']})"
+            label = f"{model} ({'高多様性' if model in high_diversity_models else '低多様性'})"
             plt.plot(model_data['temperature'], model_data['mean_similarity'], marker='o', label=label, color=color)
 
     # 全体平均を計算してプロット
     overall_mean_similarity = diversity_df.groupby('temperature')['mean_similarity'].mean().sort_index()
-    plt.plot(overall_mean_similarity.index, overall_mean_similarity.values, marker='s', linestyle='--', color='black', label=messages['overall_average'])
+    plt.plot(overall_mean_similarity.index, overall_mean_similarity.values, marker='s', linestyle='--', color='black', label='全体平均')
 
     plt.xlabel(messages['xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
     plt.ylabel(messages['ylabel_similarity'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
@@ -80,12 +80,12 @@ def create_diversity_plot(diversity_df, lang='ja'):
                     vendor = v
                     break
             color = VENDOR_COLORS.get(vendor, 'gray') if vendor else 'gray'
-            label = f"{model} ({messages['high_diversity'] if model in high_diversity_models else messages['low_diversity']})"
+            label = f"{model} ({'高多様性' if model in high_diversity_models else '低多様性'})"
             plt.plot(model_data['temperature'], model_data['diversity_score'], marker='o', label=label, color=color)
 
     # 全体平均を計算してプロット
     overall_mean_diversity = diversity_df.groupby('temperature')['diversity_score'].mean().sort_index()
-    plt.plot(overall_mean_diversity.index, overall_mean_diversity.values, marker='s', linestyle='--', color='black', label=messages['overall_average'])
+    plt.plot(overall_mean_diversity.index, overall_mean_diversity.values, marker='s', linestyle='--', color='black', label='全体平均')
 
     plt.xlabel(messages['xlabel'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
     plt.ylabel(messages['ylabel_diversity'], fontsize=VISUALIZATION_CONFIG['figure']['label_fontsize'])
@@ -130,7 +130,7 @@ def create_correlation_plots(correlation_df, lang='ja'):
     for bar in bars:
         yval = bar.get_height()
         plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.2f}', ha='center', va='bottom' if yval >= 0 else 'top',
-                fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'] * 0.6)
+                fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
     
     save_figure(plt, "temperature_reason_correlation_similarity_sorted", lang=lang)
     plt.close()
@@ -162,7 +162,7 @@ def create_correlation_plots(correlation_df, lang='ja'):
     for bar in bars:
         yval = bar.get_height()
         plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.2f}', ha='center', va='bottom' if yval >= 0 else 'top',
-                fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'] * 0.6)
+                fontsize=VISUALIZATION_CONFIG['figure']['tick_labelsize'])
     
     save_figure(plt, "temperature_reason_correlation_diversity_sorted", lang=lang)
     plt.close()
